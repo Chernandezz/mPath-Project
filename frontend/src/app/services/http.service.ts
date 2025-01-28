@@ -9,7 +9,7 @@ import { Observable, tap } from 'rxjs';
 export class HttpService {
   constructor(private httpClient: HttpClient) {}
 
-  private apiBase = 'https://localhost:7177/api';
+  private apiBase = 'http://localhost:8080/api';
 
   private getAuthHeaders() {
     const accessToken = localStorage.getItem('accessToken');
@@ -104,7 +104,7 @@ export class HttpService {
       'Content-Type': 'application/json',
     });
 
-    return this.httpClient.post('http://localhost:7177/api/Admission', body, {
+    return this.httpClient.post('http://localhost:8080/api/Admission', body, {
       headers: headers,
     });
   }

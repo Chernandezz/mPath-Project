@@ -15,7 +15,7 @@ services:
 
   backend:
     build:
-      context: ./backend/mPathProject  # Ruta corregida
+      context: ./backend/mPathProject
       dockerfile: Dockerfile
     container_name: mpath_backend
     restart: always
@@ -27,6 +27,19 @@ services:
     ports:
       - "8080:8080"
       - "8081:8081"
+    networks:
+      - mpath_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: mpath_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
     networks:
       - mpath_network
 

@@ -9,8 +9,7 @@ export const routes: Routes = [
     loadChildren: () => import('./routes.module').then((m) => m.RoutesModule),
   },
   {
-    path: '**', // Ruta que captura todo
-    canActivate: [AuthGuard],
-    component: HeaderComponent, // O redirige al componente principal
+    path: '**',
+    component: HeaderComponent,
   },
 ];
