@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using mPathProject.Context;
@@ -21,88 +20,119 @@ namespace mPathProject.Controllers
             _context = context;
         }
 
-        // GET: api/Doctor
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Doctor>>> GetDoctors()
+        public async Task<IActionResult> GetAll(int count = 10, int page = 0, string searchText = null)
         {
-            return await _context.Doctors.ToListAsync();
-        }
-
-        // GET: api/Doctor/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Doctor>> GetDoctor(long id)
-        {
-            var doctor = await _context.Doctors.FindAsync(id);
-
-            if (doctor == null)
+            try
             {
-                return NotFound();
-            }
+                var query = _context.Doctors.AsQueryable();
 
-            return doctor;
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    query = query.Where(d => d.firstName.Contains(searchText));
+                }
+
+                var totalItems = await query.CountAsync();
+                var doctors = await query
+                    .Skip(page * count)
+                    .Take(count)
+                    .ToListAsync();
+
+                return Ok(new
+                {
+                    data = doctors,
+                    totalItems
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
 
-        // PUT: api/Doctor/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(long id)
+        {
+            try
+            {
+                var doctor = await _context.Doctors.FindAsync(id);
+                if (doctor == null)
+                {
+                    return NotFound(new { message = "Doctor not found" });
+                }
+                return Ok(doctor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Doctor doctor)
+        {
+            try
+            {
+                _context.Doctors.Add(doctor);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetById), new { id = doctor.id }, doctor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDoctor(long id, Doctor doctor)
+        public async Task<IActionResult> Update(long id, Doctor doctor)
         {
             if (id != doctor.id)
             {
-                return BadRequest();
+                return BadRequest(new { message = "Mismatched Doctor ID" });
             }
-
-            _context.Entry(doctor).State = EntityState.Modified;
 
             try
             {
+                _context.Entry(doctor).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
+                return NoContent();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!DoctorExists(id))
+                if (!_context.Doctors.Any(d => d.id == id))
                 {
-                    return NotFound();
+                    return NotFound(new { message = "Doctor not found" });
                 }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-
-            return NoContent();
-        }
-
-        // POST: api/Doctor
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Doctor>> PostDoctor(Doctor doctor)
-        {
-            _context.Doctors.Add(doctor);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetDoctor", new { id = doctor.id }, doctor);
-        }
-
-        // DELETE: api/Doctor/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDoctor(long id)
-        {
-            var doctor = await _context.Doctors.FindAsync(id);
-            if (doctor == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                return StatusCode(500, new { message = ex.Message });
             }
-
-            _context.Doctors.Remove(doctor);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
-        private bool DoctorExists(long id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] List<long> ids)
         {
-            return _context.Doctors.Any(e => e.id == id);
+            try
+            {
+                var doctors = await _context.Doctors
+                    .Where(d => ids.Contains(d.id))
+                    .ToListAsync();
+
+                if (!doctors.Any())
+                {
+                    return NotFound(new { message = "No doctors found to delete" });
+                }
+
+                _context.Doctors.RemoveRange(doctors);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
     }
 }
