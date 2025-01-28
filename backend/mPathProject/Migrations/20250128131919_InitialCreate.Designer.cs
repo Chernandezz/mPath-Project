@@ -12,8 +12,8 @@ using mPathProject.Context;
 namespace mPathProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250128022008_AddUserTable")]
-    partial class AddUserTable
+    [Migration("20250128131919_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -167,6 +167,34 @@ namespace mPathProject.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Patients");
+                });
+
+            modelBuilder.Entity("mPathProject.Models.User", b =>
+                {
+                    b.Property<long>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("id"));
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("userRole")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }
