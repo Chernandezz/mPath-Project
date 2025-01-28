@@ -8,3 +8,15 @@ Accept: application/json
 GET {{mPathProject_HostAddress}}/weatherforecast
 
 ###
+
+GET {{mPathProject_HostAddress}}/api/doctor
+
+###
+
+GET {{mPathProject_HostAddress}}/api/doctor
+
+###
+
+GET {{mPathProject_HostAddress}}/api/doctor
+
+###
