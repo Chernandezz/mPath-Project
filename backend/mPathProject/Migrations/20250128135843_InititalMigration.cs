@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace mPathProject.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InititalMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,9 +37,9 @@ namespace mPathProject.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    treatment = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    doctorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    patientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    treatment = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    doctorName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    patientName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     dischargeDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     doctorId = table.Column<long>(type: "bigint", nullable: false),
@@ -95,6 +97,24 @@ namespace mPathProject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.id);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Doctors",
+                columns: new[] { "id", "active", "email", "firstName", "lastName" },
+                values: new object[,]
+                {
+                    { 1L, true, "doctor1@gmail.com", "John", "Doe" },
+                    { 2L, true, "doctor2@gmail.com", "Emily", "Smith" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Patients",
+                columns: new[] { "id", "address", "email", "firstName", "lastName", "observations", "phoneNumber" },
+                values: new object[,]
+                {
+                    { 1L, "123 Oak St", "alice@gmail.com", "Alice", "Johnson", "Asthma patient, requires regular checkups.", "5551234567" },
+                    { 2L, "456 Pine Ave", "michael@gmail.com", "Michael", "Brown", "Diabetic, on insulin therapy.", "5559876543" }
                 });
         }
 

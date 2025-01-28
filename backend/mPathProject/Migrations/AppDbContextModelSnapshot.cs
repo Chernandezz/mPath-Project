@@ -53,7 +53,7 @@ namespace mPathProject.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Admissions");
+                    b.ToTable("Admissions", (string)null);
                 });
 
             modelBuilder.Entity("mPathProject.Models.Discharge", b =>
@@ -78,19 +78,22 @@ namespace mPathProject.Migrations
 
                     b.Property<string>("doctorName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("patientName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("treatment")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("id");
 
-                    b.ToTable("Discharges");
+                    b.ToTable("Discharges", (string)null);
                 });
 
             modelBuilder.Entity("mPathProject.Models.Doctor", b =>
@@ -121,7 +124,25 @@ namespace mPathProject.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Doctors");
+                    b.ToTable("Doctors", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1L,
+                            active = true,
+                            email = "doctor1@gmail.com",
+                            firstName = "John",
+                            lastName = "Doe"
+                        },
+                        new
+                        {
+                            id = 2L,
+                            active = true,
+                            email = "doctor2@gmail.com",
+                            firstName = "Emily",
+                            lastName = "Smith"
+                        });
                 });
 
             modelBuilder.Entity("mPathProject.Models.Patient", b =>
@@ -163,7 +184,29 @@ namespace mPathProject.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Patients");
+                    b.ToTable("Patients", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1L,
+                            address = "123 Oak St",
+                            email = "alice@gmail.com",
+                            firstName = "Alice",
+                            lastName = "Johnson",
+                            observations = "Asthma patient, requires regular checkups.",
+                            phoneNumber = "5551234567"
+                        },
+                        new
+                        {
+                            id = 2L,
+                            address = "456 Pine Ave",
+                            email = "michael@gmail.com",
+                            firstName = "Michael",
+                            lastName = "Brown",
+                            observations = "Diabetic, on insulin therapy.",
+                            phoneNumber = "5559876543"
+                        });
                 });
 
             modelBuilder.Entity("mPathProject.Models.User", b =>
@@ -191,7 +234,7 @@ namespace mPathProject.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 #pragma warning restore 612, 618
         }
