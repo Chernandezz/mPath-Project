@@ -1,0 +1,84 @@
+<mat-toolbar>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <button mat-flat-button (click)="createDischarge()" color="primary" class="my-2">
+          <mat-icon>add_circle_outline</mat-icon>Create
+        </button>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="fill">
+          <mat-label>Search</mat-label>
+          <input [(ngModel)]="searchText" (keyup)="GetAll()" matInput placeholder="Enter a value" />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</mat-toolbar>
+
+<div class="container-fluid my-3">
+  <div class="row">
+    <div class="col">
+      <div class="mat-elevation-z8 rounded">
+        <table mat-table [dataSource]="dataSource" class="custom-table">
+
+          <!-- Discharge Id Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Discharge Id </th>
+            <td mat-cell *matCellDef="let element" class="text-center"> {{ element.id }} </td>
+          </ng-container>
+
+          <!-- Treatment Column -->
+          <ng-container matColumnDef="treatment">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Treatment </th>
+            <td mat-cell *matCellDef="let element" class="text-truncate"> {{ element.treatment }} </td>
+          </ng-container>
+
+          <!-- Discharge Date Column -->
+          <ng-container matColumnDef="dischargeDate">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Discharge Date </th>
+            <td mat-cell *matCellDef="let element" class="text-center"> {{ element.dischargeDate | date:'MMM dd, yyyy'
+              }} </td>
+          </ng-container>
+
+          <!-- Amount Column -->
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Amount </th>
+            <td mat-cell *matCellDef="let element" class="text-center"> {{ element.amount | currency }} </td>
+          </ng-container>
+
+          <!-- Doctor Id Column -->
+          <ng-container matColumnDef="doctorId">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Doctor Id </th>
+            <td mat-cell *matCellDef="let element" class="text-center"> {{ element.doctorId }} </td>
+          </ng-container>
+
+          <!-- Admission Id Column -->
+          <ng-container matColumnDef="admissionId">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Admission Id </th>
+            <td mat-cell *matCellDef="let element" class="text-center"> {{ element.admissionId }} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDetails(row)" class="row-click">
+          </tr>
+
+          <tr class="mat-row no-data" *matNoDataRow>
+            <td class="mat-cell text-center" [attr.colspan]="displayedColumns.length">
+              <div class="messageNoData">
+                <mat-icon class="mx-3">error</mat-icon> No records found
+              </div>
+            </td>
+          </tr>
+
+        </table>
+
+        <mat-paginator #paginator (page)="handlePageEvent($event)" [length]="totalCount" [pageSize]="pageCount"
+          [showFirstLastButtons]="true" [pageSizeOptions]="paginationOptions" [pageIndex]="pageNumber"
+          aria-label="Select page">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

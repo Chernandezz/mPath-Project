@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Discharge Details</h2>
+<mat-dialog-content>
+  <div>
+    <p><strong>Discharge Id:</strong> {{ data.id }}</p>
+    <p><strong>Admission Id:</strong> {{ data.admissionId }}</p>
+    <p><strong>Doctor Id:</strong> {{ data.doctorId }}</p>
+    <p><strong>Discharge Date:</strong> {{ data.dischargeDate | date:'MMM dd, yyyy' }}</p>
+    <p><strong>Treatment:</strong> {{ data.treatment }}</p>
+    <p><strong>Amount:</strong> ${{ data.amount }}</p>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

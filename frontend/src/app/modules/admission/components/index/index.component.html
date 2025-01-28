@@ -1,0 +1,92 @@
+<mat-toolbar>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <button mat-flat-button (click)="createAdmission()" color="primary" class="my-2">
+          <mat-icon>add_circle_outline</mat-icon>Create
+        </button>
+      </div>
+      <div class="col-6">
+        <mat-form-field appearance="fill">
+          <mat-label>Search</mat-label>
+          <input [(ngModel)]="searchText" (keyup)="GetAll()" matInput placeholder="Enter a value" />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</mat-toolbar>
+
+
+<div class="container-fluid my-3">
+  <div class="row">
+    <div class="col">
+      <div class="mat-elevation-z8 rounded">
+        <table mat-table [dataSource]="dataSource" class="custom-table">
+
+          <!-- Admission Id Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Admission Id </th>
+            <td mat-cell *matCellDef="let element" class="text-center"> {{ element.id }} </td>
+          </ng-container>
+
+          <!-- Patient Name Column -->
+          <ng-container matColumnDef="patientName">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Name </th>
+            <td mat-cell *matCellDef="let element" class="text-center"> {{ element.patientName }} </td>
+          </ng-container>
+
+          <!-- Admission Date Column -->
+          <ng-container matColumnDef="admissionDate">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Admission Date </th>
+            <td mat-cell *matCellDef="let element" class="text-center"> {{ element.admissionDate | date:'MMM dd, yyyy'
+              }} </td>
+          </ng-container>
+
+          <!-- Diagnosis Column -->
+          <ng-container matColumnDef="diagnosis">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Diagnosis </th>
+            <td mat-cell *matCellDef="let element" class="text-truncate"> {{ element.diagnosis }} </td>
+          </ng-container>
+
+          <!-- Observation Column -->
+          <ng-container matColumnDef="observation">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Observation </th>
+            <td mat-cell *matCellDef="let element" class="text-truncate"> {{ element.observation }} </td>
+          </ng-container>
+
+          <!-- Doctor Id Column -->
+          <ng-container matColumnDef="doctorId">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Doctor Id </th>
+            <td mat-cell *matCellDef="let element" class="text-center"> {{ element.doctorId }} </td>
+          </ng-container>
+
+          <!-- Patient Id Column -->
+          <ng-container matColumnDef="patientId">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Patient Id </th>
+            <td mat-cell *matCellDef="let element" class="text-center"> {{ element.patientId }} </td>
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openDetails(row)" class="row-click"></tr>
+
+
+          <tr class="mat-row no-data" *matNoDataRow>
+            <td class="mat-cell text-center" [attr.colspan]="displayedColumns.length">
+              <div class="messageNoData">
+                <mat-icon class="mx-3">error</mat-icon> No records found
+              </div>
+            </td>
+          </tr>
+
+        </table>
+
+        <mat-paginator #paginator (page)="handlePageEvent($event)" [length]="totalCount" [pageSize]="pageCount"
+          [showFirstLastButtons]="true" [pageSizeOptions]="paginationOptions" [pageIndex]="pageNumber"
+          aria-label="Select page">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+.custom-table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 12px 15px;
+  }
+
+  th {
+    background-color: #f4f4f4;
+    text-align: center; /* Alinea encabezados */
+  }
+
+  td {
+    text-align: center; /* Centra contenido */
+  }
+
+  .email-column {
+    text-align: left; /* Alinea el email a la izquierda */
+    min-width: 250px; /* Define ancho mínimo */
+    overflow: hidden; /* Trunca texto largo */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .row-click {
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .row-click:hover {
+    background-color: #f5f5f5;
+  }
+
+  tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+
+  tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  .text-truncate {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .no-data {
+    color: gray;
+    font-style: italic;
+  }
+}
