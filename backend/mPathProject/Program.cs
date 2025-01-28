@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using mPathProject.Context;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
-using mPathProject.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +19,6 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
-builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
