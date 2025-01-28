@@ -1,0 +1,14 @@
+<header>
+  <mat-toolbar color="primary">
+    <button mat-icon-button aria-label="Home" routerLink="/">
+      <mat-icon>cloud</mat-icon>
+    </button>
+    <span>mPath Health</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button aria-label="Logout" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </mat-toolbar>
+</header>
+
+<router-outlet></router-outlet>

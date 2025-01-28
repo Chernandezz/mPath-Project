@@ -1,0 +1,59 @@
+<h2 mat-dialog-title>Create Doctor</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="formGroup">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <mat-radio-group aria-label="Select an option" formControlName="active" name="active">
+            <mat-radio-button [value]="true">Active</mat-radio-button>
+            <mat-radio-button [value]="false">Inactive</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col-6">
+          <mat-form-field class="example-full-width">
+            <mat-label>First Name</mat-label>
+            <input formControlName="firstName" type="text" matInput placeholder="Ex. Dan" name="fisrtName">
+            <mat-error *ngIf="formGroup.get('firstName')?.hasError('required')">
+              First name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.get('firstName')?.hasError('firstName') && !formGroup.get('firstName')?.hasError('required')">
+              Please enter a valid first name address
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-6">
+          <mat-form-field class="example-full-width">
+            <mat-label>Last Name</mat-label>
+            <input formControlName="lastName" type="text" matInput name="lastName" placeholder="Ex. Vanz">
+            <mat-error *ngIf="formGroup.get('lastName')?.hasError('required')">
+              Last name is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="formGroup.get('lastName')?.hasError('lastName') && !formGroup.get('lastName')?.hasError('required')">
+              Please enter a valid last name address
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field class="example-full-width">
+            <mat-label>Email</mat-label>
+            <input type="email" formControlName="email" matInput name="email" placeholder="Ex. danvanz@gmail.com">
+              <mat-error *ngIf="formGroup.get('email')?.hasError('required')">
+                Email is <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="formGroup.get('email')?.hasError('email') && !formGroup.get('email')?.hasError('required')">
+                Please enter a valid email address
+              </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-flat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button cdkFocusInitial color="primary" (click)="save()">Save</button>
+
+</mat-dialog-actions>

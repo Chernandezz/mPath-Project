@@ -1,0 +1,16 @@
+<mat-dialog-content>
+  <h2 mat-dialog-title>Patient Details</h2>
+  <div class="details-container">
+    <p><strong>ID:</strong> {{ data.id }}</p>
+    <p><strong>First Name:</strong> {{ data.firstName }}</p>
+    <p><strong>Last Name:</strong> {{ data.lastName }}</p>
+    <p><strong>Address:</strong> {{ data.address }}</p>
+    <p><strong>Phone Number:</strong> {{ data.phoneNumber }}</p>
+    <p><strong>Email:</strong> {{ data.email }}</p>
+    <p><strong>Observations:</strong> {{ data.observations }}</p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

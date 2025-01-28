@@ -1,0 +1,35 @@
+.app-panel-container {
+    height: calc(100% - 64px);
+    padding-top: 50px;
+}
+
+.app-panel-container .mat-mdc-card {
+    box-shadow: 0 1px 3px 0 rgba(255, 255, 255, .15), 0 4px 6px 0 rgba(255, 255, 255, .15) !important;
+    color: rgba(255, 255, 255, .8);
+    text-align: center;
+    cursor: pointer;
+    transition: all .25s ease, transform .25s ease;
+    font-weight: bold;
+    border-bottom: #3F5185 2px solid;
+    border-radius: 0;
+}
+
+.app-panel-container .mat-mdc-card:hover {
+    background-color: rgba(0, 0, 0, .2);
+    transform: translateY(-3px);
+    box-shadow: 0 0 35px rgba(255, 255, 255, .25) !important;
+}
+
+.app-panel-container .mat-mdc-card p {
+    margin-top: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #3F5185;
+}
+
+.app-panel-container .mat-mdc-card .mat-icon{
+  transform: scale(3);
+  margin: 40px auto 20px auto;
+  color: #3F5185;
+}
