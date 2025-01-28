@@ -11,5 +11,6 @@ namespace mPathProject.Context
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Admission> Admissions { get; set; }
         public DbSet<Discharge> Discharges { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
