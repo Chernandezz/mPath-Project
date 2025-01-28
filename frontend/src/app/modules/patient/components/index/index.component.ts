@@ -49,8 +49,8 @@ export class IndexComponent {
       .GetAll(this.pageCount, this.pageNumber, this.searchText, 'Patient')
       .subscribe((response: any) => {
         console.log(response);
-        
-        this.dataSource.data = response.data.element;
+
+        this.dataSource.data = response.data;
         this.totalCount = response.data.totalCount;
       });
   }
@@ -62,11 +62,11 @@ export class IndexComponent {
     this.GetAll();
   }
   openDetails(row: any) {
-      this.dialog.open(DetailsDialogComponent, {
-        data: row,
-        width: '500px',
-      });
-    }
+    this.dialog.open(DetailsDialogComponent, {
+      data: row,
+      width: '500px',
+    });
+  }
 
   delete(patientId: number) {
     let confirmation = confirm(

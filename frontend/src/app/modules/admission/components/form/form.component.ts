@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpService } from '../../../../services/http.service';
 import { SharedModule } from '../../../global/shared.module';
 
-
 @Component({
   selector: 'app-form',
   standalone: true,
@@ -12,7 +11,6 @@ import { SharedModule } from '../../../global/shared.module';
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
 })
-
 export class FormComponent implements OnInit {
   formGroup!: FormGroup;
   doctors: any[] = []; // Lista de doctores para el dropdown
@@ -41,16 +39,18 @@ export class FormComponent implements OnInit {
 
   loadDoctors() {
     this.httpService.GetAll(100, 0, '', 'Doctor').subscribe((response: any) => {
-      this.doctors = response.data.element;
+      this.doctors = response.data;
     });
   }
 
   loadPatients() {
-    this.httpService.GetAll(100, 0, '', 'Patient').subscribe((response: any) => {
-      console.log(response.data.element);
-      
-      this.patients = response.data.element;
-    });
+    this.httpService
+      .GetAll(100, 0, '', 'Patient')
+      .subscribe((response: any) => {
+        console.log(response.data);
+
+        this.patients = response.data;
+      });
   }
 
   cancel() {
@@ -60,9 +60,17 @@ export class FormComponent implements OnInit {
   save() {
     if (this.formGroup.valid) {
       const formData = this.formGroup.value;
-      this.httpService.CreateAdmission(formData.patientId, formData.doctorId, formData.admissionDate, formData.diagnosis, formData.observation).subscribe(() => {
-        this.dialogRef.close(true);
-      });
+      this.httpService
+        .CreateAdmission(
+          formData.patientId,
+          formData.doctorId,
+          formData.admissionDate,
+          formData.diagnosis,
+          formData.observation
+        )
+        .subscribe(() => {
+          this.dialogRef.close(true);
+        });
     } else {
       this.markFormGroupTouched(this.formGroup);
     }

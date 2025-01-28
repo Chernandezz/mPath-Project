@@ -26,8 +26,16 @@ export class LoginComponent {
   onLogin() {
     this.httpService.login(this.email, this.password).subscribe({
       next: (response: any) => {
-        localStorage.setItem('token', response.data.Token);
-        this.router.navigate(['']); // Redirige a una ruta protegida
+        console.log('Login Response:', response);
+
+        if (response && response.accessToken) {
+          localStorage.setItem('accessToken', response.accessToken);
+          console.log('Token stored:', response.accessToken);
+          this.router.navigate(['']); // Redirige a una ruta protegida
+        } else {
+          console.error('Error: No accessToken received');
+          alert('Invalid login credentials');
+        }
       },
       error: (error) => {
         console.error('Login failed', error);

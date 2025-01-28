@@ -44,6 +44,7 @@ export class IndexComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    
     this.GetAll();
   }
 
@@ -51,7 +52,9 @@ export class IndexComponent implements OnInit {
     this.httpService
       .GetAll(this.pageCount, this.pageNumber, this.searchText, 'Doctor')
       .subscribe((response: any) => {
-        this.dataSource.data = response.data.element;
+        console.log(response);
+        
+        this.dataSource.data = response.data;
         this.totalCount = response.data.totalCount;
       });
   }

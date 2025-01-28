@@ -46,7 +46,7 @@ export class IndexComponent implements OnInit {
     this.httpService
       .GetAll(this.pageCount, this.pageNumber, this.searchText, 'Discharge')
       .subscribe((response: any) => {
-        this.dataSource.data = response.data.element;
+        this.dataSource.data = response.data;
         this.totalCount = response.data.totalCount;
       });
   }

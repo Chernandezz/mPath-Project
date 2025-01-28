@@ -1,1 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-toolbar
+  .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
+  display: none;
+}
+
+.mat-mdc-form-field:not(.mat-mdc-paginator-page-size-select) {
+  width: 100%;
+}
+
+.mat-mdc-no-data-row td div.messageNoData {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  line-height: 50px;
+  background-color: #FFFFFF;
+}
+
+
+.mat-mdc-no-data-row td div.messageNoData .mat-icon {
+ color: rgb(238, 79, 79);
+}

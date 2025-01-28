@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,23 +9,25 @@ import { Router } from '@angular/router';
 export class HttpService {
   constructor(private httpClient: HttpClient) {}
 
-  private apiBase = 'http://localhost:7177/api';
+  private apiBase = 'https://localhost:7177/api';
 
   private getAuthHeaders() {
-    const token = localStorage.getItem('token');
+    const accessToken = localStorage.getItem('accessToken');
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${accessToken}`,
     });
   }
 
   GetAll(count: number, page: number, searchText: string, route: string) {
-    let params = new HttpParams()
+    const params = new HttpParams()
       .set('count', count.toString())
       .set('page', page.toString())
       .set('searchText', searchText);
 
-    return this.httpClient.get(`${this.apiBase}/${route}`, {
-      params,
+    const url = `${this.apiBase}/${route}?${params.toString()}`;
+    console.log(`🔹 GET request to: ${url}`);
+
+    return this.httpClient.get(url, {
       headers: this.getAuthHeaders(),
     });
   }
@@ -37,24 +40,36 @@ export class HttpService {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    return !!localStorage.getItem('accessToken');
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
+  getaccessToken(): string | null {
+    return localStorage.getItem('accessToken');
   }
 
-  login(email: string, password: string) {
-    console.log('test');
+  login(email: string, password: string): Observable<any> {
+    const url = `${this.apiBase}/User/Login`;
+    console.log(`POST request to: ${url}`);
 
-    return this.httpClient.post(`${this.apiBase}/auth/login`, {
-      email,
-      password,
-    });
+    return this.httpClient.post(url, { email, password }).pipe(
+      tap(
+        (response: any) => {
+          console.log(`Response:`, response);
+          if (response && response.accessToken) {
+            localStorage.setItem('token', response.accessToken);
+          } else {
+            console.warn(`No accessToken found in response`);
+          }
+        },
+        (error) => {
+          console.error(`Error Response:`, error);
+        }
+      )
+    );
   }
 
   CreateDoctor(
@@ -89,7 +104,7 @@ export class HttpService {
       'Content-Type': 'application/json',
     });
 
-    return this.httpClient.post('http://localhost:54756/api/Admission', body, {
+    return this.httpClient.post('http://localhost:7177/api/Admission', body, {
       headers: headers,
     });
   }
