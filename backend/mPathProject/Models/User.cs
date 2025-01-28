@@ -4,18 +4,18 @@ namespace mPathProject.Models
 {
     public class User
     {
-        public long Id { get; set; }
+        public long id { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string Email { get; set; }
+        public string email { get; set; }
 
         [Required]
         [StringLength(255)]
-        public string PasswordHash { get; set; }
+        public string password { get; set; }
 
         [Required]
         [StringLength(20)]
-        public string Role { get; set; }
+        public string userRole { get; set; }
     }
 }
