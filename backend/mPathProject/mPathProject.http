@@ -1,0 +1,10 @@
+@mPathProject_HostAddress = https://localhost:7177
+
+GET {{mPathProject_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+GET {{mPathProject_HostAddress}}/weatherforecast
+
+###
