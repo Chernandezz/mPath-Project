@@ -9,6 +9,8 @@ using mPathProject.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 var connectionString = builder.Configuration.GetConnectionString("Connection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -62,6 +64,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "mPath API v1"));
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate(); 
+}
 // Usar la política de CORS configurada para permitir todo
 app.UseCors("AllowAll");
 app.UseAuthentication();

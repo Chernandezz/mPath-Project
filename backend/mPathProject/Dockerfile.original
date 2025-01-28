@@ -1,0 +1,17 @@
+# Usa la imagen base de .NET 9
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+WORKDIR /app
+EXPOSE 7177
+
+# Usa la imagen de SDK para compilar la aplicación
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+COPY . .
+RUN dotnet restore
+RUN dotnet publish -c Release -o /app/publish
+
+# Copia los archivos publicados a la imagen final
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "mPathProject.dll"]

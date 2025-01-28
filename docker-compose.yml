@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: mpath_sql
+    restart: always
+    environment:
+      SA_PASSWORD: "StrongPassword!2024"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1400:1433"
+    networks:
+      - mpath_network
+
+  backend:
+    build:
+      context: ./backend/mPathProject  # Ruta corregida
+      dockerfile: Dockerfile
+    container_name: mpath_backend
+    restart: always
+    depends_on:
+      - db
+    environment:
+      ConnectionStrings__Connection: "Server=db,1433;Database=mPathDB;User Id=sa;Password=StrongPassword!2024;TrustServerCertificate=True;"
+      ASPNETCORE_ENVIRONMENT: "Development"
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - mpath_network
+
+networks:
+  mpath_network:
+    driver: bridge

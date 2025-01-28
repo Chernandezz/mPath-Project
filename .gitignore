@@ -34,10 +34,6 @@ appsettings.private.json
 
 # Ignore Docker files
 **/.dockerignore
-**/docker-compose.yml
-**/docker-compose.*.yml
-**/Dockerfile
-**/Dockerfile.*
 **/.env
 **/.env.local
 
