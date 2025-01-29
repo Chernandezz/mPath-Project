@@ -1,10 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using mPathProject.Application.DTOs;
+using mPathProject.Infrastructure.Persistence;
 
 namespace mPathProject.Infrastructure.Authentication
 {
@@ -18,13 +18,13 @@ namespace mPathProject.Infrastructure.Authentication
             _configuration = configuration;
         }
 
-        public async Task<LoginResponseDTO?> Authenticate(LoginRequestModel request)
+        public async Task<LoginResponseDto?> Authenticate(LoginRequestDto request)
         {
-            if (string.IsNullOrWhiteSpace(request.email) || string.IsNullOrWhiteSpace(request.password))
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
                 return null;
 
-            var userAccount = await _dbContext.Users.FirstOrDefaultAsync(x => x.email == request.email);
-            if (userAccount is null || !PasswordHashHandler.VerifyPassword(request.password, userAccount.password))
+            var userAccount = await _dbContext.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
+            if (userAccount is null || !PasswordHashHandler.VerifyPassword(request.Password, userAccount.Password))
                 return null;
             var issuer = _configuration["JwtConfig:Issuer"];
             var audience = _configuration["JwtConfig:Audience"];
@@ -36,7 +36,7 @@ namespace mPathProject.Infrastructure.Authentication
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                new Claim(JwtRegisteredClaimNames.Name, request.email)
+                new Claim(JwtRegisteredClaimNames.Name, request.Email)
                 }),
                 Expires = tokenExpiryTimeStamp,
                 Issuer = issuer,
@@ -49,10 +49,10 @@ namespace mPathProject.Infrastructure.Authentication
             var securityToken = tokenHandler.CreateToken(tokenDescriptor);
             var accessToken = tokenHandler.WriteToken(securityToken);
 
-            return new LoginResponseDTO
+            return new LoginResponseDto
             {
                 AccessToken = accessToken,
-                Email = request.email,
+                Email = request.Email,
                 ExpiresIn = (int)tokenExpiryTimeStamp.Subtract(DateTime.UtcNow).TotalSeconds,
 
             };
