@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Infrastructure.Persistence;
+﻿using mPathProject.Application.DTOs;
+using mPathProject.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using mPathProject.Domain.Entities;
+using System.Threading.Tasks;
 
 namespace mPathProject.API.Controllers
 {
@@ -13,98 +9,39 @@ namespace mPathProject.API.Controllers
     [ApiController]
     public class AdmissionController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAdmissionService _admissionService;
 
-        public AdmissionController(AppDbContext context)
+        public AdmissionController(IAdmissionService admissionService)
         {
-            _context = context;
+            _admissionService = admissionService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll(int count = 10, int page = 0, string searchText = null)
         {
-            try
-            {
-                var query = _context.Admissions.AsQueryable();
-
-                if (!string.IsNullOrEmpty(searchText))
-                {
-                    query = query.Where(a => a.observation.Contains(searchText));
-                }
-
-                var totalItems = await query.CountAsync();
-                var admissions = await query
-                    .Skip(page * count)
-                    .Take(count)
-                    .ToListAsync();
-
-                return Ok(new { data = admissions, totalItems });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var admissions = await _admissionService.GetAllAsync(count, page, searchText);
+            return Ok(admissions);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(long id)
         {
-            try
-            {
-                var admission = await _context.Admissions.FindAsync(id);
-                if (admission == null)
-                {
-                    return NotFound(new { message = "Admission not found" });
-                }
-                return Ok(admission);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var admission = await _admissionService.GetByIdAsync(id);
+            return admission != null ? Ok(admission) : NotFound();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Admission admission)
+        public async Task<IActionResult> Create(CreateAdmissionRequestDto admissionDto)
         {
-            try
-            {
-                _context.Admissions.Add(admission);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetById), new { admission.id }, admission);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var newAdmission = await _admissionService.CreateAsync(admissionDto);
+            return CreatedAtAction(nameof(GetById), new { id = newAdmission.Id }, newAdmission);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(long id, Admission admission)
+        public async Task<IActionResult> Update(long id, UpdateAdmissionRequestDto admissionDto)
         {
-            if (id != admission.id)
-            {
-                return BadRequest(new { message = "Mismatched Admission ID" });
-            }
-
-            try
-            {
-                _context.Entry(admission).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                return NoContent();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Admissions.Any(a => a.id == id))
-                {
-                    return NotFound(new { message = "Admission not found" });
-                }
-                throw;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var updated = await _admissionService.UpdateAsync(id, admissionDto);
+            return updated ? NoContent() : NotFound();
         }
     }
 }
