@@ -26,7 +26,7 @@ export class IndexComponent implements OnInit {
   ];
   dataSource = new MatTableDataSource<any>([]);
 
-  totalCount = 0;
+  totalItems = 0;
   pageCount = 10;
   pageNumber = 0;
   paginationOptions: number[] = [1, 5, 10, 25, 100];
@@ -48,7 +48,7 @@ export class IndexComponent implements OnInit {
       .GetAll(this.pageCount, this.pageNumber, this.searchText, 'Admission')
       .subscribe((response: any) => {
         this.dataSource.data = response.data;
-        this.totalCount = response.data.totalCount;
+        this.totalItems = response.totalItems;
       });
   }
 
@@ -61,8 +61,8 @@ export class IndexComponent implements OnInit {
 
   openDetails(row: any) {
     const dialogRef = this.dialog.open(DetailsDialogComponent, {
-      width: '600px', // Ajusta el tamaño del diálogo según necesites
-      data: row, // Pasamos la fila seleccionada al diálogo
+      width: '600px',
+      data: row,
     });
 
     dialogRef.afterClosed().subscribe((result) => {

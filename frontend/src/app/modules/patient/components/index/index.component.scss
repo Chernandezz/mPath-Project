@@ -10,17 +10,17 @@
 
   th {
     background-color: #f4f4f4;
-    text-align: center; /* Alinea encabezados */
+    text-align: center; 
   }
 
   td {
-    text-align: center; /* Centra contenido */
+    text-align: center; 
   }
 
   .email-column {
-    text-align: left; /* Alinea el email a la izquierda */
-    min-width: 250px; /* Define ancho mínimo */
-    overflow: hidden; /* Trunca texto largo */
+    text-align: left; 
+    min-width: 250px; 
+    overflow: hidden; 
     text-overflow: ellipsis;
     white-space: nowrap;
   }

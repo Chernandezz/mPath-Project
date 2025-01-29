@@ -9,7 +9,7 @@ import { Observable, tap } from 'rxjs';
 export class HttpService {
   constructor(private httpClient: HttpClient) {}
 
-  private apiBase = 'http://localhost:8080/api';
+  private apiBase = 'http://localhost:5247/api';
 
   private getAuthHeaders() {
     const accessToken = localStorage.getItem('accessToken');
@@ -25,7 +25,6 @@ export class HttpService {
       .set('searchText', searchText);
 
     const url = `${this.apiBase}/${route}?${params.toString()}`;
-    console.log(`🔹 GET request to: ${url}`);
 
     return this.httpClient.get(url, {
       headers: this.getAuthHeaders(),
@@ -53,12 +52,10 @@ export class HttpService {
 
   login(email: string, password: string): Observable<any> {
     const url = `${this.apiBase}/User/Login`;
-    console.log(`POST request to: ${url}`);
 
     return this.httpClient.post(url, { email, password }).pipe(
       tap(
         (response: any) => {
-          console.log(`Response:`, response);
           if (response && response.accessToken) {
             localStorage.setItem('token', response.accessToken);
           } else {
@@ -104,7 +101,7 @@ export class HttpService {
       'Content-Type': 'application/json',
     });
 
-    return this.httpClient.post('http://localhost:8080/api/Admission', body, {
+    return this.httpClient.post('http://localhost:5247/api/Admission', body, {
       headers: headers,
     });
   }

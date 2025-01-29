@@ -75,7 +75,7 @@
           </tr>
         </table>
 
-        <mat-paginator #paginator (page)="handlePageEvent($event)" [length]="totalCount" [pageSize]="pageCount"
+        <mat-paginator #paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageCount"
           [showFirstLastButtons]="true" [pageSizeOptions]="paginationOptions" [pageIndex]="pageNumber"
           aria-label="Select page">
         </mat-paginator>

@@ -15,14 +15,14 @@ export class HeaderComponent {
 
   navigateBasedOnAuth() {
     if (this.httpService.isLoggedIn()) {
-      this.router.navigate(['/login']); // Navega al inicio si está logueado
+      this.router.navigate(['/login']); 
     } else {
-      this.router.navigate(['/']); // Navega al login si no está logueado
+      this.router.navigate(['/']); 
     }
   }
 
   logout() {
-    this.httpService.logout(); // Llama al método logout del servicio
-    this.router.navigate(['/login']); // Redirige al login
+    this.httpService.logout();
+    this.router.navigate(['/login']); 
   }
 }

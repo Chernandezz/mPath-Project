@@ -27,7 +27,7 @@ export class IndexComponent {
   ];
   dataSource = new MatTableDataSource<any>([]);
 
-  totalCount = 0;
+  totalItems = 0;
   pageCount = 10;
   pageNumber = 0;
   paginationOptions: number[] = [1, 5, 10, 25, 100];
@@ -48,10 +48,8 @@ export class IndexComponent {
     this.httpService
       .GetAll(this.pageCount, this.pageNumber, this.searchText, 'Patient')
       .subscribe((response: any) => {
-        console.log(response);
-
         this.dataSource.data = response.data;
-        this.totalCount = response.data.totalCount;
+        this.totalItems = response.totalItems;
       });
   }
 

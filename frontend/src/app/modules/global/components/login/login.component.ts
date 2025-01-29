@@ -26,12 +26,10 @@ export class LoginComponent {
   onLogin() {
     this.httpService.login(this.email, this.password).subscribe({
       next: (response: any) => {
-        console.log('Login Response:', response);
 
         if (response && response.accessToken) {
           localStorage.setItem('accessToken', response.accessToken);
-          console.log('Token stored:', response.accessToken);
-          this.router.navigate(['']); // Redirige a una ruta protegida
+          this.router.navigate(['']); 
         } else {
           console.error('Error: No accessToken received');
           alert('Invalid login credentials');
