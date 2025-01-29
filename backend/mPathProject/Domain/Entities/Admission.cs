@@ -1,22 +1,27 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace mPathProject.Domain.Entities
 {
     public class Admission
     {
-        public long id { get; set; }
-        public string patientName { get; set; }
+        public long Id { get; set; }
 
         [Required]
-        public DateTime admissionDate { get; set; }
-        [Required]
-        public string diagnosis { get; set; }
-        public string observation { get; set; }
-        [Required]
-        public long doctorId { get; set; }
-        [Required]
-        public long patientId { get; set; }
+        public DateTime AdmissionDate { get; set; }
 
+        [Required]
+        public string Diagnosis { get; set; }
 
+        public string? Observation { get; set; }
+
+        [Required]
+        public long DoctorId { get; set; }
+
+        [Required]
+        public long PatientId { get; set; }
+
+        public virtual Doctor Doctor { get; set; }
+        public virtual Patient Patient { get; set; }
     }
 }

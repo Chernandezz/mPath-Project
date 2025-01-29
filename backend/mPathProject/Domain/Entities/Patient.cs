@@ -1,27 +1,32 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace mPathProject.Domain.Entities
 {
     public class Patient
     {
-        public long id { get; set; }
+        [Key, ForeignKey("User")]
+        public long Id { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string firstName { get; set; }
+        public string FirstName { get; set; }
+
         [Required]
         [StringLength(50)]
-        public string lastName { get; set; }
+        public string LastName { get; set; }
+
         [Required]
         [StringLength(500)]
-        public string address { get; set; }
+        public string Address { get; set; }
+
         [Required]
         [StringLength(10)]
-        public string phoneNumber { get; set; }
-        [Required]
-        [StringLength(50)]
-        [EmailAddress]
-        public string email { get; set; }
-        public string observations { get; set; }
+        public string PhoneNumber { get; set; }
+
+        public string? Observations { get; set; }
+
+        // Relation with User
+        public virtual User User { get; set; }
     }
 }
