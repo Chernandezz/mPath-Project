@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace mPathProject.Migrations
 {
     /// <inheritdoc />
-    public partial class InititalMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -100,12 +100,30 @@ namespace mPathProject.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Admissions",
+                columns: new[] { "id", "admissionDate", "diagnosis", "doctorId", "observation", "patientId", "patientName" },
+                values: new object[,]
+                {
+                    { 1L, new DateTime(2023, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Flu", 1L, "Mild symptoms", 1L, "Alice Johnson" },
+                    { 2L, new DateTime(2023, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), "Broken arm", 2L, "Needs surgery", 2L, "Bob Brown" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Discharges",
+                columns: new[] { "id", "admissionId", "amount", "dischargeDate", "doctorId", "doctorName", "patientName", "treatment" },
+                values: new object[,]
+                {
+                    { 1L, 1L, 100.00m, new DateTime(2023, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 1L, "John Doe", "Alice Johnson", "Antibiotics" },
+                    { 2L, 2L, 500.00m, new DateTime(2023, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified), 2L, "Jane Smith", "Bob Brown", "Surgery" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Doctors",
                 columns: new[] { "id", "active", "email", "firstName", "lastName" },
                 values: new object[,]
                 {
-                    { 1L, true, "doctor1@gmail.com", "John", "Doe" },
-                    { 2L, true, "doctor2@gmail.com", "Emily", "Smith" }
+                    { 1L, true, "john.doe@example.com", "John", "Doe" },
+                    { 2L, true, "jane.smith@example.com", "Jane", "Smith" }
                 });
 
             migrationBuilder.InsertData(
@@ -113,8 +131,17 @@ namespace mPathProject.Migrations
                 columns: new[] { "id", "address", "email", "firstName", "lastName", "observations", "phoneNumber" },
                 values: new object[,]
                 {
-                    { 1L, "123 Oak St", "alice@gmail.com", "Alice", "Johnson", "Asthma patient, requires regular checkups.", "5551234567" },
-                    { 2L, "456 Pine Ave", "michael@gmail.com", "Michael", "Brown", "Diabetic, on insulin therapy.", "5559876543" }
+                    { 1L, "123 Main St", "alice.johnson@example.com", "Alice", "Johnson", "", "1234567890" },
+                    { 2L, "456 Elm St", "bob.brown@example.com", "Bob", "Brown", "", "0987654321" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "id", "email", "password", "userRole" },
+                values: new object[,]
+                {
+                    { 1L, "doctor@doctor.com", "AQAAAAIAAYagAAAAEMPv0sp+FoVDuxBgcsym2p7fRtW3+em2g2W7wd0pgNFKwmXtkjCFcJIEyy2cmXK6pw==", "Doctor" },
+                    { 2L, "admin@admin.com", "AQAAAAIAAYagAAAAEHAgp0HFG9qc9eOr9W15Dp/qcrk3rbaCDo97hBui3SIlwim0ojzgn8lUQxBwEyWIaQ==", "Admin" }
                 });
         }
 

@@ -12,8 +12,8 @@ using mPathProject.Context;
 namespace mPathProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250128135843_InititalMigration")]
-    partial class InititalMigration
+    [Migration("20250129012138_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,6 +57,28 @@ namespace mPathProject.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Admissions");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1L,
+                            admissionDate = new DateTime(2023, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            diagnosis = "Flu",
+                            doctorId = 1L,
+                            observation = "Mild symptoms",
+                            patientId = 1L,
+                            patientName = "Alice Johnson"
+                        },
+                        new
+                        {
+                            id = 2L,
+                            admissionDate = new DateTime(2023, 10, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            diagnosis = "Broken arm",
+                            doctorId = 2L,
+                            observation = "Needs surgery",
+                            patientId = 2L,
+                            patientName = "Bob Brown"
+                        });
                 });
 
             modelBuilder.Entity("mPathProject.Models.Discharge", b =>
@@ -97,6 +119,30 @@ namespace mPathProject.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Discharges");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1L,
+                            admissionId = 1L,
+                            amount = 100.00m,
+                            dischargeDate = new DateTime(2023, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            doctorId = 1L,
+                            doctorName = "John Doe",
+                            patientName = "Alice Johnson",
+                            treatment = "Antibiotics"
+                        },
+                        new
+                        {
+                            id = 2L,
+                            admissionId = 2L,
+                            amount = 500.00m,
+                            dischargeDate = new DateTime(2023, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            doctorId = 2L,
+                            doctorName = "Jane Smith",
+                            patientName = "Bob Brown",
+                            treatment = "Surgery"
+                        });
                 });
 
             modelBuilder.Entity("mPathProject.Models.Doctor", b =>
@@ -134,7 +180,7 @@ namespace mPathProject.Migrations
                         {
                             id = 1L,
                             active = true,
-                            email = "doctor1@gmail.com",
+                            email = "john.doe@example.com",
                             firstName = "John",
                             lastName = "Doe"
                         },
@@ -142,8 +188,8 @@ namespace mPathProject.Migrations
                         {
                             id = 2L,
                             active = true,
-                            email = "doctor2@gmail.com",
-                            firstName = "Emily",
+                            email = "jane.smith@example.com",
+                            firstName = "Jane",
                             lastName = "Smith"
                         });
                 });
@@ -193,22 +239,22 @@ namespace mPathProject.Migrations
                         new
                         {
                             id = 1L,
-                            address = "123 Oak St",
-                            email = "alice@gmail.com",
+                            address = "123 Main St",
+                            email = "alice.johnson@example.com",
                             firstName = "Alice",
                             lastName = "Johnson",
-                            observations = "Asthma patient, requires regular checkups.",
-                            phoneNumber = "5551234567"
+                            observations = "",
+                            phoneNumber = "1234567890"
                         },
                         new
                         {
                             id = 2L,
-                            address = "456 Pine Ave",
-                            email = "michael@gmail.com",
-                            firstName = "Michael",
+                            address = "456 Elm St",
+                            email = "bob.brown@example.com",
+                            firstName = "Bob",
                             lastName = "Brown",
-                            observations = "Diabetic, on insulin therapy.",
-                            phoneNumber = "5559876543"
+                            observations = "",
+                            phoneNumber = "0987654321"
                         });
                 });
 
@@ -238,6 +284,22 @@ namespace mPathProject.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            id = 1L,
+                            email = "doctor@doctor.com",
+                            password = "AQAAAAIAAYagAAAAEMPv0sp+FoVDuxBgcsym2p7fRtW3+em2g2W7wd0pgNFKwmXtkjCFcJIEyy2cmXK6pw==",
+                            userRole = "Doctor"
+                        },
+                        new
+                        {
+                            id = 2L,
+                            email = "admin@admin.com",
+                            password = "AQAAAAIAAYagAAAAEHAgp0HFG9qc9eOr9W15Dp/qcrk3rbaCDo97hBui3SIlwim0ojzgn8lUQxBwEyWIaQ==",
+                            userRole = "Admin"
+                        });
                 });
 #pragma warning restore 612, 618
         }

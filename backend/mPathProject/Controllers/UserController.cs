@@ -24,14 +24,12 @@ namespace mPathProject.Controllers
             _jwtService = jwtService;
         }
 
-        // GET: api/User
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await _context.Users.ToListAsync();
         }
 
-        // GET: api/User/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -57,8 +55,6 @@ namespace mPathProject.Controllers
         }
 
 
-
-        // POST: api/User (Crear usuario con contraseña hasheada)
         [HttpPost]
         public async Task<ActionResult<User>> CreateUser([FromBody] User user)
         {
@@ -69,7 +65,6 @@ namespace mPathProject.Controllers
                 return BadRequest("Invalid Request");
             }
 
-            // Hashear la contraseña antes de guardarla
             user.password = PasswordHashHandler.HashPassword(user.password);
 
             _context.Users.Add(user);
@@ -78,7 +73,6 @@ namespace mPathProject.Controllers
             return CreatedAtAction(nameof(GetUser), new { id = user.id }, user);
         }
 
-        // PUT: api/User/{id} (Actualizar usuario con verificación de contraseña)
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] User user)
         {
@@ -93,7 +87,6 @@ namespace mPathProject.Controllers
                 return NotFound();
             }
 
-            // Si se proporciona una nueva contraseña, hashearla
             if (!string.IsNullOrWhiteSpace(user.password))
             {
                 existingUser.password = PasswordHashHandler.HashPassword(user.password);
@@ -123,7 +116,6 @@ namespace mPathProject.Controllers
             return NoContent();
         }
 
-        // DELETE: api/User/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

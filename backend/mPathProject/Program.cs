@@ -13,7 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("Connection");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure()));
+
 builder.Services.AddScoped<JwtService>();
 
 builder.Services.AddAuthentication(options =>
@@ -38,7 +39,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// Configurar CORS para permitir cualquier origen, encabezado y método
+// CORS ALLOW ALL
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -67,9 +68,18 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    dbContext.Database.Migrate(); 
+
+    try
+    {
+        dbContext.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error applying migrations: {ex.Message}");
+    }
 }
-// Usar la política de CORS configurada para permitir todo
+
+
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
