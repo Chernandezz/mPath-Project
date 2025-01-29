@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Infrastructure.Persistence;
+﻿using mPathProject.Application.DTOs;
+using mPathProject.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using mPathProject.Domain.Entities;
+using System.Threading.Tasks;
 
 namespace mPathProject.API.Controllers
 {
@@ -13,98 +9,39 @@ namespace mPathProject.API.Controllers
     [ApiController]
     public class DischargeController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IDischargeService _dischargeService;
 
-        public DischargeController(AppDbContext context)
+        public DischargeController(IDischargeService dischargeService)
         {
-            _context = context;
+            _dischargeService = dischargeService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll(int count = 10, int page = 0, string searchText = null)
         {
-            try
-            {
-                var query = _context.Discharges.AsQueryable();
-
-                if (!string.IsNullOrEmpty(searchText))
-                {
-                    query = query.Where(d => d.treatment.Contains(searchText));
-                }
-
-                var totalItems = await query.CountAsync();
-                var discharges = await query
-                    .Skip(page * count)
-                    .Take(count)
-                    .ToListAsync();
-
-                return Ok(new { data = discharges, totalItems });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var discharges = await _dischargeService.GetAllAsync(count, page, searchText);
+            return Ok(discharges);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(long id)
         {
-            try
-            {
-                var discharge = await _context.Discharges.FindAsync(id);
-                if (discharge == null)
-                {
-                    return NotFound(new { message = "Discharge not found" });
-                }
-                return Ok(discharge);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var discharge = await _dischargeService.GetByIdAsync(id);
+            return discharge != null ? Ok(discharge) : NotFound();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Discharge discharge)
+        public async Task<IActionResult> Create(CreateDischargeRequestDto dischargeDto)
         {
-            try
-            {
-                _context.Discharges.Add(discharge);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetById), new { discharge.id }, discharge);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var newDischarge = await _dischargeService.CreateAsync(dischargeDto);
+            return CreatedAtAction(nameof(GetById), new { id = newDischarge.Id }, newDischarge);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(long id, Discharge discharge)
+        public async Task<IActionResult> Update(long id, UpdateDischargeRequestDto dischargeDto)
         {
-            if (id != discharge.id)
-            {
-                return BadRequest(new { message = "Mismatched Discharge ID" });
-            }
-
-            try
-            {
-                _context.Entry(discharge).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                return NoContent();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Discharges.Any(d => d.id == id))
-                {
-                    return NotFound(new { message = "Discharge not found" });
-                }
-                throw;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var updated = await _dischargeService.UpdateAsync(id, dischargeDto);
+            return updated ? NoContent() : NotFound();
         }
     }
 }
