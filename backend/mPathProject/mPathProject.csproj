@@ -29,11 +29,7 @@
 
   <ItemGroup>
     <Folder Include="API\Middlewares\" />
-    <Folder Include="Application\Interfaces\" />
-    <Folder Include="Application\Services\" />
     <Folder Include="Domain\ValueObjects\" />
-    <Folder Include="Infrastructure\Persistence\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
