@@ -32,10 +32,10 @@ export class FormComponent implements OnInit {
     if (this.formGroup.valid) {
       const formData = this.formGroup.value;
 
-      // Llama al método Create del HttpService
+     
       this.httpService
         .CreateDoctor(
-          formData.id, // Si el formulario tiene un campo "id"
+          formData.id, 
           formData.firstName,
           formData.lastName,
           formData.active,
@@ -43,7 +43,7 @@ export class FormComponent implements OnInit {
         )
         .subscribe({
           next: (response: any) => {
-            this.dialogRef.close(formData); // Cierra el diálogo después de enviar
+            this.dialogRef.close(formData); 
           },
           error: (error: any) => {
             console.error('Error sending data to backend:', error);

@@ -7,19 +7,16 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/User';
+  private apiUrl = 'http://localhost:5247/api/User';
 
   constructor(private http: HttpClient, private router: Router) {}
 
   login(email: string, password: string): Observable<any> {
     const url = `${this.apiUrl}/Login`;
-    console.log(`POST request to: ${url}`);
-    console.log('Request body:', { email, password });
 
     return this.http.post(url, { email, password }).pipe(
       tap(
         (response: any) => {
-          console.log('Response:', response);
           if (response && response.accessToken) {
             localStorage.setItem('accessToken', response.accessToken);
           } else {

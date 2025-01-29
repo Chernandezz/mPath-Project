@@ -75,7 +75,8 @@
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="row-click" (click)="openDetails(row)"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="row-click" (click)="openDetails(row)">
+          </tr>
 
           <tr class="mat-row no-data" *matNoDataRow>
             <td class="mat-cell text-center" [attr.colspan]="displayedColumns.length">
@@ -86,7 +87,7 @@
           </tr>
         </table>
 
-        <mat-paginator #paginator (page)="handlePageEvent($event)" [length]="totalCount" [pageSize]="pageCount"
+        <mat-paginator #paginator (page)="handlePageEvent($event)" [length]="totalItems" [pageSize]="pageCount"
           [showFirstLastButtons]="true" [pageSizeOptions]="paginationOptions" [pageIndex]="pageNumber"
           aria-label="Select page">
         </mat-paginator>

@@ -13,8 +13,8 @@ import { SharedModule } from '../../../global/shared.module';
 })
 export class FormComponent implements OnInit {
   formGroup!: FormGroup;
-  doctors: any[] = []; // Lista de doctores para el dropdown
-  patients: any[] = []; // Lista de pacientes para el dropdown
+  doctors: any[] = [];
+  patients: any[] = [];
 
   readonly dialogRef = inject(MatDialogRef<FormComponent>);
   data = inject(MAT_DIALOG_DATA);
@@ -47,8 +47,6 @@ export class FormComponent implements OnInit {
     this.httpService
       .GetAll(100, 0, '', 'Patient')
       .subscribe((response: any) => {
-        console.log(response.data);
-
         this.patients = response.data;
       });
   }
