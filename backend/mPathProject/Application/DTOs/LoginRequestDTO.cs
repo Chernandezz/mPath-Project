@@ -1,4 +1,4 @@
-﻿namespace mPathProject.Models
+﻿namespace mPathProject.Application.DTOs
 {
     public class LoginRequestModel
     {

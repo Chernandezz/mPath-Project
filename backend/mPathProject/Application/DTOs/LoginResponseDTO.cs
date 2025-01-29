@@ -1,8 +1,8 @@
-﻿namespace mPathProject.Models
+﻿namespace mPathProject.Application.DTOs
 {
-    public class LoginResponseModel
+    public class LoginResponseDTO
     {
-      
+
 
         public string Email { get; set; }
         public string AccessToken { get; set; }

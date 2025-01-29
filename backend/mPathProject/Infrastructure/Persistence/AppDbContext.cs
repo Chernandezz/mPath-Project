@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using mPathProject.Models;
+using mPathProject.Domain.Entities;
 using System;
 
-namespace mPathProject.Context
+namespace Infrastructure.Persistence
 {
     public class AppDbContext : DbContext
     {

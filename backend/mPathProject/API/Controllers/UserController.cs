@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using mPathProject.Context;
-using mPathProject.Models;
-using mPathProject.Handlers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using mPathProject.Services;
+using Infrastructure.Persistence;
+using mPathProject.Application.DTOs;
+using mPathProject.Domain.Entities;
+using mPathProject.Infrastructure.Authentication;
 
-namespace mPathProject.Controllers
+namespace mPathProject.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -45,7 +45,7 @@ namespace mPathProject.Controllers
 
         [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel request)
+        public async Task<ActionResult<LoginResponseDTO>> Login(LoginRequestModel request)
         {
             var result = await _jwtService.Authenticate(request);
             if (result is null)
@@ -70,7 +70,7 @@ namespace mPathProject.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUser), new { id = user.id }, user);
+            return CreatedAtAction(nameof(GetUser), new { user.id }, user);
         }
 
         [HttpPut("{id}")]

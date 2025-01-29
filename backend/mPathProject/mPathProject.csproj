@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>e28d98c0-8103-43ff-90cb-708fbdcd48d0</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>.</DockerfileContext>
+    <Dockerfile>.</Dockerfile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,8 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Logic\" />
-    <Folder Include="Data\" />
+    <Folder Include="API\Middlewares\" />
+    <Folder Include="Application\Interfaces\" />
+    <Folder Include="Application\Services\" />
+    <Folder Include="Domain\ValueObjects\" />
+    <Folder Include="Infrastructure\Persistence\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

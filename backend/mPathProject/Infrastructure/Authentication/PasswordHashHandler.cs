@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 
-namespace mPathProject.Handlers
+namespace mPathProject.Infrastructure.Authentication
 {
     public class PasswordHashHandler
     {
@@ -56,9 +56,9 @@ namespace mPathProject.Handlers
 
         private static uint ReadNetworkByteOrder(byte[] buffer, int offset)
         {
-            return ((uint)(buffer[offset] << 24))
-                 | ((uint)(buffer[offset + 1] << 16))
-                 | ((uint)(buffer[offset + 2] << 8))
+            return (uint)(buffer[offset] << 24)
+                 | (uint)(buffer[offset + 1] << 16)
+                 | (uint)(buffer[offset + 2] << 8)
                  | buffer[offset + 3];
         }
 
@@ -67,7 +67,7 @@ namespace mPathProject.Handlers
             buffer[offset] = (byte)(value >> 24);
             buffer[offset + 1] = (byte)(value >> 16);
             buffer[offset + 2] = (byte)(value >> 8);
-            buffer[offset + 3] = (byte)(value);
+            buffer[offset + 3] = (byte)value;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace mPathProject.Models
+namespace mPathProject.Domain.Entities
 {
     public class User
     {

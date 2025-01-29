@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using mPathProject.Context;
-using mPathProject.Models;
+using mPathProject.Domain.Entities;
 
-namespace mPathProject.Controllers
+namespace mPathProject.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -75,7 +75,7 @@ namespace mPathProject.Controllers
             {
                 _context.Doctors.Add(doctor);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetById), new { id = doctor.id }, doctor);
+                return CreatedAtAction(nameof(GetById), new { doctor.id }, doctor);
             }
             catch (Exception ex)
             {

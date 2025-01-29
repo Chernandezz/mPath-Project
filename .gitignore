@@ -33,26 +33,26 @@ appsettings.private.json
 *.user.config
 
 # Ignore Docker files
-**/.dockerignore
-**/.env
-**/.env.local
+/.dockerignore
+/.env
+/.env.local
 
-# Ignore Node.js files
-node_modules/
+# Ignore Node.js files (Frontend)
+frontend/node_modules/
 npm-debug.log
 yarn-error.log
+
+# Ignore frontend build files (Asegurar que solo ignore el de Angular)
+frontend/dist/
+frontend/build/
+frontend/out/
+frontend/.cache/
+frontend/.temp/
 
 # Ignore SQL Server files
 *.mdf
 *.ldf
 *.ndf
-
-# Ignore frontend build files
-dist/
-build/
-out/
-.cache/
-.temp/
 
 # Ignore log and temporary files
 *.log
@@ -61,7 +61,14 @@ out/
 *.bak
 *.backup
 
-
 # Ignore NuGet files
 packages/
 *.nupkg
+
+**/.gitkeep
+
+
+!docker-compose.yml
+!frontend/angular.json
+!frontend/package.json
+!frontend/package-lock.json

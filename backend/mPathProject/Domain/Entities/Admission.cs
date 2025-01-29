@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace mPathProject.Models
+namespace mPathProject.Domain.Entities
 {
     public class Admission
     {
@@ -8,7 +8,7 @@ namespace mPathProject.Models
         public string patientName { get; set; }
 
         [Required]
-        public System.DateTime admissionDate { get; set; }
+        public DateTime admissionDate { get; set; }
         [Required]
         public string diagnosis { get; set; }
         public string observation { get; set; }

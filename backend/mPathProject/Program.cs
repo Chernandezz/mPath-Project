@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using mPathProject.Context;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using mPathProject.Services;
+using Infrastructure.Persistence;
+using mPathProject.Infrastructure.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 

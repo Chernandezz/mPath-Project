@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace mPathProject.Models
+namespace mPathProject.Domain.Entities
 {
-    public class Doctor
+    public class Patient
     {
         public long id { get; set; }
 
@@ -13,10 +13,15 @@ namespace mPathProject.Models
         [StringLength(50)]
         public string lastName { get; set; }
         [Required]
-        public bool active { get; set; }
+        [StringLength(500)]
+        public string address { get; set; }
+        [Required]
+        [StringLength(10)]
+        public string phoneNumber { get; set; }
         [Required]
         [StringLength(50)]
         [EmailAddress]
         public string email { get; set; }
+        public string observations { get; set; }
     }
 }

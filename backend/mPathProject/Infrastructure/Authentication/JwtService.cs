@@ -1,24 +1,24 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using mPathProject.Context;
-using mPathProject.Handlers;
-using mPathProject.Models;
+using mPathProject.Application.DTOs;
 
-namespace mPathProject.Services
+namespace mPathProject.Infrastructure.Authentication
 {
     public class JwtService
     {
         private readonly AppDbContext _dbContext;
         private readonly IConfiguration _configuration;
-        public JwtService(AppDbContext dbContext, IConfiguration configuration) {
+        public JwtService(AppDbContext dbContext, IConfiguration configuration)
+        {
             _dbContext = dbContext;
             _configuration = configuration;
         }
 
-        public async Task<LoginResponseModel?> Authenticate(LoginRequestModel request)
+        public async Task<LoginResponseDTO?> Authenticate(LoginRequestModel request)
         {
             if (string.IsNullOrWhiteSpace(request.email) || string.IsNullOrWhiteSpace(request.password))
                 return null;
@@ -49,7 +49,7 @@ namespace mPathProject.Services
             var securityToken = tokenHandler.CreateToken(tokenDescriptor);
             var accessToken = tokenHandler.WriteToken(securityToken);
 
-            return new LoginResponseModel
+            return new LoginResponseDTO
             {
                 AccessToken = accessToken,
                 Email = request.email,

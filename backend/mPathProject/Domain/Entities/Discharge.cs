@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace mPathProject.Models
+namespace mPathProject.Domain.Entities
 {
     public class Discharge
     {
@@ -20,10 +20,10 @@ namespace mPathProject.Models
         public string patientName { get; set; }
 
         [Required]
-        public System.DateTime dischargeDate { get; set; }
+        public DateTime dischargeDate { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(18,2)")] 
+        [Column(TypeName = "decimal(18,2)")]
         [Range(0, 9999999.99)]
         public decimal amount { get; set; }
 
