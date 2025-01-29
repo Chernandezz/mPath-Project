@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Infrastructure.Persistence;
+﻿using mPathProject.Application.DTOs;
+using mPathProject.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using mPathProject.Domain.Entities;
+using System.Threading.Tasks;
 
 namespace mPathProject.API.Controllers
 {
@@ -13,126 +9,39 @@ namespace mPathProject.API.Controllers
     [ApiController]
     public class DoctorController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IDoctorService _doctorService;
 
-        public DoctorController(AppDbContext context)
+        public DoctorController(IDoctorService doctorService)
         {
-            _context = context;
+            _doctorService = doctorService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll(int count = 10, int page = 0, string searchText = null)
         {
-            try
-            {
-                var query = _context.Doctors.AsQueryable();
-
-                if (!string.IsNullOrEmpty(searchText))
-                {
-                    query = query.Where(d => d.firstName.Contains(searchText));
-                }
-
-                var totalItems = await query.CountAsync();
-                var doctors = await query
-                    .Skip(page * count)
-                    .Take(count)
-                    .ToListAsync();
-
-                return Ok(new
-                {
-                    data = doctors,
-                    totalItems
-                });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var doctors = await _doctorService.GetAllAsync(count, page, searchText);
+            return Ok(doctors);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(long id)
         {
-            try
-            {
-                var doctor = await _context.Doctors.FindAsync(id);
-                if (doctor == null)
-                {
-                    return NotFound(new { message = "Doctor not found" });
-                }
-                return Ok(doctor);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var doctor = await _doctorService.GetByIdAsync(id);
+            return doctor != null ? Ok(doctor) : NotFound();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Doctor doctor)
+        public async Task<IActionResult> Create(CreateDoctorRequestDto doctorDto)
         {
-            try
-            {
-                _context.Doctors.Add(doctor);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetById), new { doctor.id }, doctor);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var newDoctor = await _doctorService.CreateAsync(doctorDto);
+            return CreatedAtAction(nameof(GetById), new { id = newDoctor.Id }, newDoctor);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(long id, Doctor doctor)
+        public async Task<IActionResult> Update(long id, UpdateDoctorRequestDto doctorDto)
         {
-            if (id != doctor.id)
-            {
-                return BadRequest(new { message = "Mismatched Doctor ID" });
-            }
-
-            try
-            {
-                _context.Entry(doctor).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                return NoContent();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Doctors.Any(d => d.id == id))
-                {
-                    return NotFound(new { message = "Doctor not found" });
-                }
-                throw;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
-        }
-
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] List<long> ids)
-        {
-            try
-            {
-                var doctors = await _context.Doctors
-                    .Where(d => ids.Contains(d.id))
-                    .ToListAsync();
-
-                if (!doctors.Any())
-                {
-                    return NotFound(new { message = "No doctors found to delete" });
-                }
-
-                _context.Doctors.RemoveRange(doctors);
-                await _context.SaveChangesAsync();
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var updated = await _doctorService.UpdateAsync(id, doctorDto);
+            return updated ? NoContent() : NotFound();
         }
     }
 }
