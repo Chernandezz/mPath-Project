@@ -77,11 +77,6 @@ namespace mPathProject.Application.Services
             return true;
         }
 
-        public async Task<bool> DeleteAsync(long id)
-        {
-            await _userRepository.DeleteAsync(id);
-            return true;
-        }
 
         public async Task<LoginResponseDto?> AuthenticateAsync(LoginRequestDto loginDto)
         {

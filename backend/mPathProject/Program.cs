@@ -88,13 +88,16 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
+        dbContext.Database.EnsureDeleted();
         dbContext.Database.Migrate();
+        SeedData.Initialize(dbContext);
     }
     catch (Exception ex)
     {
         Console.WriteLine($"Error applying migrations: {ex.Message}");
     }
 }
+
 
 app.UseCors("AllowAll");
 app.UseAuthentication();

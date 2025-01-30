@@ -2,6 +2,10 @@
 using mPathProject.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using mPathProject.Domain.Entities;
+using mPathProject.Infrastructure.Persistence;
+using System.Numerics;
 
 namespace mPathProject.API.Controllers
 {
@@ -17,11 +21,21 @@ namespace mPathProject.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int count = 10, int page = 0, string searchText = null)
+        [HttpGet]
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync(int count = 10, int page = 0, string searchText = null)
         {
-            var doctors = await _doctorService.GetAllAsync(count, page, searchText);
-            return Ok(doctors);
+            (List<DoctorDto> doctors, int totalItems) = await _doctorService.GetAllAsync(count, page, searchText);
+
+            var response = new
+            {
+                data = doctors,
+                totalItems
+            };
+
+            return Ok(response);
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(long id)
@@ -42,6 +56,17 @@ namespace mPathProject.API.Controllers
         {
             var updated = await _doctorService.UpdateAsync(id, doctorDto);
             return updated ? NoContent() : NotFound();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            bool deleted = await _doctorService.DeactivateAsync(id);
+
+            if (!deleted)
+                return NotFound(new { message = "Doctor not found" });
+
+            return NoContent();
         }
     }
 }

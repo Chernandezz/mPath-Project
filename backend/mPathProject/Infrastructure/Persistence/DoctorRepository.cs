@@ -16,15 +16,20 @@ namespace mPathProject.Infrastructure.Persistence
             _context = context;
         }
 
-        public async Task<List<Doctor>> GetAllAsync(int count, int page, string searchText)
+        public async Task<(List<Doctor> doctors, int totalItems)> GetAllAsync(int count, int page, string searchText)
         {
             var query = _context.Doctors.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchText))
                 query = query.Where(d => d.FirstName.Contains(searchText));
 
-            return await query.Skip(page * count).Take(count).ToListAsync();
+            int totalItems = await query.CountAsync();
+            var doctors = await query.Skip(page * count).Take(count).ToListAsync();
+
+            return (doctors, totalItems);
         }
+
+
 
         public async Task<Doctor> GetByIdAsync(long id)
         {
@@ -43,14 +48,20 @@ namespace mPathProject.Infrastructure.Persistence
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(List<long> ids)
+       
+
+        public async Task<bool> DeactivateAsync(long id)
         {
-            var doctors = await _context.Doctors.Where(d => ids.Contains(d.Id)).ToListAsync();
-            if (doctors.Any())
-            {
-                _context.Doctors.RemoveRange(doctors);
-                await _context.SaveChangesAsync();
-            }
+
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == id);
+
+            if (doctor == null)
+                return false; 
+
+            doctor.Active = false;
+            await _context.SaveChangesAsync();
+            return true;
+
         }
 
         public async Task<bool> ExistsAsync(long id)

@@ -1,27 +1,25 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using mPathProject.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
-namespace mPathProject.Domain.Entities
+public class User
 {
-    public class User
-    {
-        public long Id { get; set; }
+    [Key]
+    public long Id { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        [EmailAddress]
-        public string Email { get; set; }
+    [Required]
+    [StringLength(50)]
+    [EmailAddress]
+    public string Email { get; set; }
 
-        [Required]
-        [StringLength(255)]
-        public string Password { get; set; }
+    [Required]
+    [StringLength(255)]
+    public string Password { get; set; }
 
-        [Required]
-        [StringLength(20)]
-        public string UserRole { get; set; } // "Admin", "Doctor", "Patient"
+    [Required]
+    [StringLength(20)]
+    public string UserRole { get; set; } // "Admin", "Doctor", "Patient"
 
-        // Relations
-        public Doctor? Doctor { get; set; }
-        public Patient? Patient { get; set; }
-    }
+    // Relation 1 on 1 with Doctor y Patient
+    public virtual Doctor? Doctor { get; set; }
+    public virtual Patient? Patient { get; set; }
 }

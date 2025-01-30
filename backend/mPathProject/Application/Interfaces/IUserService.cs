@@ -10,7 +10,6 @@ namespace mPathProject.Application.Interfaces
         Task<UserDto> GetByIdAsync(long id);
         Task<UserDto> CreateAsync(CreateUserRequestDto userDto);
         Task<bool> UpdateAsync(long id, UpdateUserRequestDto userDto);
-        Task<bool> DeleteAsync(long id);
         Task<LoginResponseDto?> AuthenticateAsync(LoginRequestDto loginDto);
     }
 }

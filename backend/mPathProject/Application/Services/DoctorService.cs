@@ -1,4 +1,5 @@
-﻿using mPathProject.Application.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using mPathProject.Application.DTOs;
 using mPathProject.Application.Interfaces;
 using mPathProject.Domain.Entities;
 using System.Collections.Generic;
@@ -16,17 +17,24 @@ namespace mPathProject.Application.Services
             _doctorRepository = doctorRepository;
         }
 
-        public async Task<List<DoctorDto>> GetAllAsync(int count, int page, string searchText)
+        
+
+
+        public async Task<(List<DoctorDto>, int totalItems)> GetAllAsync(int count, int page, string searchText)
         {
-            var doctors = await _doctorRepository.GetAllAsync(count, page, searchText);
-            return doctors.Select(d => new DoctorDto
+            var (doctors, totalItems) = await _doctorRepository.GetAllAsync(count, page, searchText);
+
+            var doctorDtos = doctors.Select(d => new DoctorDto
             {
                 Id = d.Id,
                 FirstName = d.FirstName,
                 LastName = d.LastName,
                 Active = d.Active
             }).ToList();
+
+            return (doctorDtos, totalItems);
         }
+
 
         public async Task<DoctorDto> GetByIdAsync(long id)
         {
@@ -73,10 +81,9 @@ namespace mPathProject.Application.Services
             return true;
         }
 
-        public async Task<bool> DeleteAsync(List<long> ids)
+        public async Task<bool> DeactivateAsync(long id)
         {
-            await _doctorRepository.DeleteAsync(ids);
-            return true;
+            return await _doctorRepository.DeactivateAsync(id);
         }
     }
 }
