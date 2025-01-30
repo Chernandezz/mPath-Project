@@ -6,11 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using mPathProject.Domain.Entities;
 using mPathProject.Infrastructure.Persistence;
 using System.Numerics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace mPathProject.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DoctorController : ControllerBase
     {
         private readonly IDoctorService _doctorService;
@@ -20,8 +22,6 @@ namespace mPathProject.API.Controllers
             _doctorService = doctorService;
         }
 
-        [HttpGet]
-        [HttpGet]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync(int count = 10, int page = 0, string searchText = null)
         {
@@ -58,15 +58,27 @@ namespace mPathProject.API.Controllers
             return updated ? NoContent() : NotFound();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(long id)
+        [HttpPut("{id}/activate")]
+        public async Task<IActionResult> ActivateAsync(long id)
         {
-            bool deleted = await _doctorService.DeactivateAsync(id);
+            bool activated = await _doctorService.ActivateAsync(id);
 
-            if (!deleted)
+            if (!activated)
                 return NotFound(new { message = "Doctor not found" });
 
-            return NoContent();
+            return Ok(new { message = "Doctor activated successfully" });
         }
+
+        [HttpPut("{id}/deactivate")]
+        public async Task<IActionResult> DeactivateAsync(long id)
+        {
+            bool deactivated = await _doctorService.DeactivateAsync(id);
+
+            if (!deactivated)
+                return NotFound(new { message = "Doctor not found" });
+
+            return Ok(new { message = "Doctor deactivated successfully" });
+        }
+        
     }
 }

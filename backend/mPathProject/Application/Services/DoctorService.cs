@@ -85,5 +85,10 @@ namespace mPathProject.Application.Services
         {
             return await _doctorRepository.DeactivateAsync(id);
         }
+
+        public async Task<bool> ActivateAsync(long id)
+        {
+            return await _doctorRepository.ActivateAsync(id);
+        }
     }
 }

@@ -47,7 +47,23 @@ export class HttpService {
     });
   }
 
-  delete(route: string, id: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.apiBase}/${route}/${id}`);
+  deactivate<T>(route: string, id: number): Observable<T> {
+    return this.httpClient.put<T>(
+      `${this.apiBase}/${route}/${id}/deactivate`,
+      null,
+      {
+        headers: this.getAuthHeaders(),
+      }
+    );
+  }
+
+  activate<T>(route: string, id: number): Observable<T> {
+    return this.httpClient.put<T>(
+      `${this.apiBase}/${route}/${id}/activate`,
+      null,
+      {
+        headers: this.getAuthHeaders(),
+      }
+    );
   }
 }

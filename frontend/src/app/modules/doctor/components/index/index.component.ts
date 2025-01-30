@@ -28,12 +28,27 @@ export class IndexComponent implements OnInit {
     this.loadDoctors();
   }
 
+  activateDoctor(doctorId: number) {
+    this.doctorService.activate(doctorId).subscribe(() => {
+      this.loadDoctors();
+    });
+  }
+
+  deactivateDoctor(doctorId: number) {
+    if (confirm(`Are you sure you want to remove doctor (ID: ${doctorId})?`)) {
+      this.doctorService.deactivate(doctorId).subscribe(() => {
+        this.loadDoctors();
+      });
+    }
+  }
+
   loadDoctors() {
     this.doctorService
       .getAll(this.pageCount, this.pageNumber, this.searchText)
       .subscribe({
         next: (response) => {
           this.dataSource.data = response.data;
+          
           this.totalItems = response.totalItems;
         },
         error: (error) =>
@@ -41,13 +56,6 @@ export class IndexComponent implements OnInit {
       });
   }
 
-  delete(doctorId: number) {
-    if (confirm(`Are you sure you want to remove doctor (ID: ${doctorId})?`)) {
-      this.doctorService.delete(doctorId).subscribe(() => {
-        this.loadDoctors();
-      });
-    }
-  }
 
   createDoctor() {
     const dialogRef = this.dialog.open(FormComponent, {

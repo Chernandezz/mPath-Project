@@ -31,3 +31,19 @@ body {
 .mat-mdc-no-data-row td div.messageNoData .mat-icon {
  color: rgb(238, 79, 79);
 }
+
+.custom-table tr.inactive-row {
+  background-color: #e0e0e0 !important;
+}
+
+.custom-table tr.inactive-row td {
+  color: #7a7a7a !important;
+}
+
+.custom-table tr.inactive-row:hover {
+  background-color: #e0e0e0 !important;
+}
+
+.custom-table tr.inactive-row button {
+  pointer-events: auto !important;
+}

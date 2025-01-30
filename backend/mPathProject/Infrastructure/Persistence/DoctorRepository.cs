@@ -24,7 +24,7 @@ namespace mPathProject.Infrastructure.Persistence
                 query = query.Where(d => d.FirstName.Contains(searchText));
 
             int totalItems = await query.CountAsync();
-            var doctors = await query.Skip(page * count).Take(count).ToListAsync();
+            var doctors = await query.OrderByDescending(d=> d.Active).Skip(page * count).Take(count).ToListAsync();
 
             return (doctors, totalItems);
         }
@@ -59,6 +59,20 @@ namespace mPathProject.Infrastructure.Persistence
                 return false; 
 
             doctor.Active = false;
+            await _context.SaveChangesAsync();
+            return true;
+
+        }
+
+        public async Task<bool> ActivateAsync(long id)
+        {
+
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == id);
+
+            if (doctor == null)
+                return false;
+
+            doctor.Active = true;
             await _context.SaveChangesAsync();
             return true;
 

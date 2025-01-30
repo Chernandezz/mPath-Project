@@ -20,7 +20,6 @@ export class DoctorService {
     page: number,
     searchText: string
   ): Observable<{ data: Doctor[]; totalItems: number }> {
-    
     return this.httpService.get<{ data: Doctor[]; totalItems: number }>(
       this.route,
       count,
@@ -41,8 +40,11 @@ export class DoctorService {
     return this.httpService.put<void>(this.route, id, doctor);
   }
 
-  delete(id: number): Observable<void> {
-    
-    return this.httpService.delete(this.route, id);
+  deactivate(id: number): Observable<void> {
+    return this.httpService.deactivate(this.route, id);
+  }
+
+  activate(id: number): Observable<void> {
+    return this.httpService.activate(this.route, id);
   }
 }

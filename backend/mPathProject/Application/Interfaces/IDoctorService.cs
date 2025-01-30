@@ -11,5 +11,6 @@ namespace mPathProject.Application.Interfaces
         Task<DoctorDto> CreateAsync(CreateDoctorRequestDto doctorDto);
         Task<bool> UpdateAsync(long id, UpdateDoctorRequestDto doctorDto);
         Task<bool> DeactivateAsync(long id);
+        Task<bool> ActivateAsync(long id);
     }
 }
