@@ -1,101 +1,73 @@
 import { Component, OnInit } from '@angular/core';
-import { SharedModule } from '../../../global/shared.module';
-import { HttpService } from '../../../../services/http.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
+import { DoctorService } from '../../../../core/services/doctor.service';
+import { Doctor } from '../../../../core/models/doctor.model';
 import { FormComponent } from '../form/form.component';
 import { DetailsDialogComponent } from '../details-dialog/details-dialog.component';
+import { SharedModule } from '../../../global/shared.module';
+import { catchError, tap, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-index',
-  standalone: true,
   imports: [SharedModule],
   templateUrl: './index.component.html',
-  styleUrl: './index.component.scss',
 })
 export class IndexComponent implements OnInit {
-  displayedColumns: string[] = [
-    'id',
-    'firstName',
-    'lastName',
-    'email',
-    'actions',
-  ];
-  dataSource = new MatTableDataSource<any>([]);
-
+  displayedColumns = ['id', 'firstName', 'lastName', 'actions'];
+  dataSource = new MatTableDataSource<Doctor>([]);
   totalItems = 0;
   pageCount = 10;
   pageNumber = 0;
+  searchText = '';
   paginationOptions: number[] = [1, 5, 10, 25, 100];
 
-  searchText = '';
-
-  openDetails(row: any) {
-    this.dialog.open(DetailsDialogComponent, {
-      data: row,
-      width: '500px',
-    });
-  }
-  constructor(
-    private httpService: HttpService,
-    private toastr: ToastrService,
-    public dialog: MatDialog
-  ) {}
+  constructor(private doctorService: DoctorService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.GetAll();
+    this.loadDoctors();
   }
 
-  GetAll() {
-    this.httpService
-      .GetAll(this.pageCount, this.pageNumber, this.searchText, 'Doctor')
-      .subscribe((response: any) => {
-        this.dataSource.data = response.data;
-        this.totalItems = response.totalItems;
+  loadDoctors() {
+    this.doctorService
+      .getAll(this.pageCount, this.pageNumber, this.searchText)
+      .subscribe({
+        next: (response) => {
+          this.dataSource.data = response.data;
+          this.totalItems = response.totalItems;
+        },
+        error: (error) =>
+          console.error('Subscription error in loadDoctors:', error),
       });
   }
 
-  handlePageEvent(event: any) {
-    this.pageCount = event.pageSize;
-    this.pageNumber = event.pageIndex;
-
-    this.GetAll();
-  }
-
   delete(doctorId: number) {
-    let confirmation = confirm(
-      `Are you sure you want to remove the doctor (ID: ${doctorId})?`
-    );
-
-    if (confirmation) {
-      let ids = [doctorId];
-
-      this.httpService.Delete(ids).subscribe((response: any) => {
-        this.toastr.success('Doctor removed succesfully', 'Confirmation');
-
-        this.GetAll();
+    if (confirm(`Are you sure you want to remove doctor (ID: ${doctorId})?`)) {
+      this.doctorService.delete(doctorId).subscribe(() => {
+        this.loadDoctors();
       });
     }
   }
 
   createDoctor() {
     const dialogRef = this.dialog.open(FormComponent, {
-      disableClose: true,
-      autoFocus: true,
-      closeOnNavigation: false,
-      position: { top: '30px' },
       width: '700px',
-      data: {
-        type: 'Create',
-      },
+      data: { type: 'Create' },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result !== false) {
-        this.toastr.success('Doctor created succesfully', 'Confirmation');
-        this.GetAll();
-      }
+      if (result !== false) this.loadDoctors();
     });
+  }
+
+  openDetails(doctor: Doctor) {
+    this.dialog.open(DetailsDialogComponent, { data: doctor, width: '500px' });
+  }
+
+  handlePageEvent(event: any) {
+    this.pageCount = event.pageSize;
+    this.pageNumber = event.pageIndex;
+
+    this.loadDoctors();
   }
 }
