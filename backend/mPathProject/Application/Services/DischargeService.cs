@@ -1,6 +1,7 @@
 ﻿using mPathProject.Application.DTOs;
 using mPathProject.Application.Interfaces;
 using mPathProject.Domain.Entities;
+using mPathProject.Infrastructure.Persistence;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,11 +16,10 @@ namespace mPathProject.Application.Services
         {
             _dischargeRepository = dischargeRepository;
         }
-
-        public async Task<List<DischargeDto>> GetAllAsync(int count, int page, string searchText)
+        public async Task<(List<DischargeDto>, int totalItems)> GetAllAsync(int count, int page, string searchText)
         {
-            var discharges = await _dischargeRepository.GetAllAsync(count, page, searchText);
-            return discharges.Select(d => new DischargeDto
+            var (discharges, totalItems) = await _dischargeRepository.GetAllAsync(count, page, searchText);
+            var dischargeDtos = discharges.Select(d => new DischargeDto
             {
                 Id = d.Id,
                 Treatment = d.Treatment,
@@ -28,6 +28,8 @@ namespace mPathProject.Application.Services
                 IsPaid = d.IsPaid,
                 AdmissionId = d.AdmissionId
             }).ToList();
+
+            return (dischargeDtos, totalItems);
         }
 
         public async Task<DischargeDto> GetByIdAsync(long id)

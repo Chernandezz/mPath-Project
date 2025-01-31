@@ -6,6 +6,6 @@ export const doctorRoutes: Routes = [
   {
     path: 'doctor',
     component: IndexComponent,
-    canActivate: [AuthGuard], 
+    canActivate: [AuthGuard],
   },
 ];

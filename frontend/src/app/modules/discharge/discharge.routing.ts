@@ -6,6 +6,5 @@ export const dischargeRoutes: Routes = [
   {
     path: 'discharge',
     component: IndexComponent,
-    canActivate: [AuthGuard], 
   },
 ];

@@ -16,15 +16,17 @@ namespace mPathProject.Infrastructure.Persistence
             _context = context;
         }
 
-        public async Task<List<Discharge>> GetAllAsync(int count, int page, string searchText)
+        public async Task<(List<Discharge>, int totaItems)> GetAllAsync(int count, int page, string searchText)
         {
             var query = _context.Discharges.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchText))
                 query = query.Where(d => d.Treatment.Contains(searchText));
 
-            return await query.Skip(page * count).Take(count).ToListAsync();
+            int totalItems = await query.CountAsync();
+            return (await query.Skip(page * count).Take(count).ToListAsync(), totalItems);
         }
+
 
         public async Task<Discharge> GetByIdAsync(long id)
         {

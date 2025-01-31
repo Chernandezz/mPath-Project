@@ -15,14 +15,14 @@
         </mat-card>
       </div>
 
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2">
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2" *ngIf="role === 'Admin'">
         <mat-card routerLink="doctor">
           <mat-icon>badge</mat-icon>
           <p>Doctors</p>
         </mat-card>
       </div>
 
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2">
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2" *ngIf="role === 'Admin' || role === 'Doctor'">
         <mat-card routerLink="patient">
           <mat-icon>co_present</mat-icon>
           <p>Patients</p>

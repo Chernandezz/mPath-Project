@@ -24,6 +24,16 @@ export class AuthService {
       );
   }
 
+  getUserRole(): string | null {
+    const token = this.getToken();
+
+    if (!token) return null;
+
+    const payload = this.decodeToken(token);
+
+    return payload?.role || null;
+  }
+
   logout(): void {
     localStorage.removeItem('accessToken');
     this.router.navigate(['/login']);
@@ -40,15 +50,15 @@ export class AuthService {
     const payload = this.decodeToken(token);
     if (!payload || !payload.exp) return false;
 
-    const currentTime = Math.floor(Date.now() / 1000); 
+    const currentTime = Math.floor(Date.now() / 1000);
     return payload.exp > currentTime;
   }
 
   private decodeToken(token: string): any {
     try {
-      const base64Url = token.split('.')[1]; 
+      const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      return JSON.parse(atob(base64)); 
+      return JSON.parse(atob(base64));
     } catch (error) {
       return null;
     }

@@ -36,7 +36,8 @@ namespace mPathProject.Infrastructure.Authentication
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                new Claim(JwtRegisteredClaimNames.Name, request.Email)
+                new Claim(JwtRegisteredClaimNames.Name, request.Email),
+                new Claim(ClaimTypes.Role, userAccount.UserRole)
                 }),
                 Expires = tokenExpiryTimeStamp,
                 Issuer = issuer,

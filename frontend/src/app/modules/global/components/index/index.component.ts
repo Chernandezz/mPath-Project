@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SharedModule } from '../../shared.module';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-index',
@@ -8,4 +9,13 @@ import { SharedModule } from '../../shared.module';
   templateUrl: './index.component.html',
   styleUrl: './index.component.scss',
 })
-export class IndexComponent {}
+export class IndexComponent implements OnInit {
+  role: string | null = null;
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+
+    this.role = this.authService.getUserRole();
+  }
+}

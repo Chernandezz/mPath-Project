@@ -20,7 +20,6 @@ export class IndexComponent implements OnInit {
     'treatment',
     'dischargeDate',
     'amount',
-    'doctorId',
     'admissionId',
   ];
   dataSource = new MatTableDataSource<any>([]);
