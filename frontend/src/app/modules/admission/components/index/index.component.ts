@@ -17,7 +17,6 @@ import { DetailsDialogComponent } from '../details-dialog/details-dialog.compone
 export class IndexComponent implements OnInit {
   displayedColumns: string[] = [
     'id',
-    'patientName',
     'admissionDate',
     'diagnosis',
     'observation',

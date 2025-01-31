@@ -6,7 +6,7 @@ namespace mPathProject.Application.Interfaces
 {
     public interface IAdmissionRepository
     {
-        Task<List<Admission>> GetAllAsync(int count, int page, string searchText);
+        Task<(List<Admission>, int totaItems)> GetAllAsync(int count, int page, string searchText);
         Task<Admission> GetByIdAsync(long id);
         Task AddAsync(Admission admission);
         Task UpdateAsync(Admission admission);

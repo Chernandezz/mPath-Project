@@ -21,9 +21,7 @@ export class IndexComponent {
     'lastName',
     'address',
     'phoneNumber',
-    'email',
     'observations',
-    'actions',
   ];
   dataSource = new MatTableDataSource<any>([]);
 
@@ -82,7 +80,7 @@ export class IndexComponent {
     }
   }
 
-  createDoctor() {
+  createPatient() {
     const dialogRef = this.dialog.open(FormComponent, {
       disableClose: true,
       autoFocus: true,
@@ -96,7 +94,7 @@ export class IndexComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== false) {
-        this.toastr.success('Doctor created succesfully', 'Confirmation');
+        this.toastr.success('Patient created succesfully', 'Confirmation');
         this.GetAll();
       }
     });

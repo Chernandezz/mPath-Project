@@ -1,6 +1,8 @@
 ﻿using mPathProject.Application.DTOs;
 using mPathProject.Application.Interfaces;
 using mPathProject.Domain.Entities;
+using mPathProject.Infrastructure.Authentication;
+using mPathProject.Infrastructure.Persistence;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,17 +11,21 @@ namespace mPathProject.Application.Services
 {
     public class PatientService : IPatientService
     {
-        private readonly IPatientRepository _patientRepository;
 
-        public PatientService(IPatientRepository patientRepository)
+        private readonly IPatientRepository _patientRepository;
+        private readonly IUserService _userService;
+
+        public PatientService(IPatientRepository patientRepository, IUserService userService)
         {
             _patientRepository = patientRepository;
+            _userService = userService;
         }
 
-        public async Task<List<PatientDto>> GetAllAsync(int count, int page, string searchText)
+        public async Task<(List<PatientDto>, int totalItems)> GetAllAsync(int count, int page, string searchText)
         {
-            var patients = await _patientRepository.GetAllAsync(count, page, searchText);
-            return patients.Select(p => new PatientDto
+            var (patients, totalItems) = await _patientRepository.GetAllAsync(count, page, searchText);
+
+            var patientsDtos = patients.Select(p => new PatientDto
             {
                 Id = p.Id,
                 FirstName = p.FirstName,
@@ -28,6 +34,8 @@ namespace mPathProject.Application.Services
                 PhoneNumber = p.PhoneNumber,
                 Observations = p.Observations
             }).ToList();
+
+            return (patientsDtos, totalItems);
         }
 
         public async Task<PatientDto> GetByIdAsync(long id)
@@ -43,11 +51,19 @@ namespace mPathProject.Application.Services
                 Observations = patient.Observations
             };
         }
-
         public async Task<PatientDto> CreateAsync(CreatePatientRequestDto patientDto)
         {
+            var user = await _userService.CreateAsync(new CreateUserRequestDto
+            {
+                Email = patientDto.Email,
+                Password = PasswordHashHandler.HashPassword(patientDto.Password),
+                UserRole = "Patient"
+            });
+
+
             var patient = new Patient
             {
+                Id = user.Id,
                 FirstName = patientDto.FirstName,
                 LastName = patientDto.LastName,
                 Address = patientDto.Address,

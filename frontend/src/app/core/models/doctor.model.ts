@@ -3,7 +3,6 @@ export interface Doctor {
   FirstName: string;
   LastName: string;
   Active: boolean;
-  Email: string;
 }
 
 export interface CreateDoctorRequestDto {

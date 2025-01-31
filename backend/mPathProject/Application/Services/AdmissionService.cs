@@ -16,10 +16,10 @@ namespace mPathProject.Application.Services
             _admissionRepository = admissionRepository;
         }
 
-        public async Task<List<AdmissionDto>> GetAllAsync(int count, int page, string searchText)
+        public async Task<(List<AdmissionDto>, int totalItems)> GetAllAsync(int count, int page, string searchText)
         {
-            var admissions = await _admissionRepository.GetAllAsync(count, page, searchText);
-            return admissions.Select(a => new AdmissionDto
+            var (admissions, totalItems) = await _admissionRepository.GetAllAsync(count, page, searchText);
+            var admissionDtos = admissions.Select(a => new AdmissionDto
             {
                 Id = a.Id,
                 AdmissionDate = a.AdmissionDate,
@@ -28,6 +28,8 @@ namespace mPathProject.Application.Services
                 DoctorId = a.DoctorId,
                 PatientId = a.PatientId
             }).ToList();
+
+            return (admissionDtos, totalItems);
         }
 
         public async Task<AdmissionDto> GetByIdAsync(long id)

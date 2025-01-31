@@ -2,6 +2,7 @@
 using mPathProject.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using mPathProject.Application.Services;
 
 namespace mPathProject.API.Controllers
 {
@@ -19,8 +20,16 @@ namespace mPathProject.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(int count = 10, int page = 0, string searchText = null)
         {
-            var admissions = await _admissionService.GetAllAsync(count, page, searchText);
-            return Ok(admissions);
+
+            (List<AdmissionDto> admissions, int totalItems) = await _admissionService.GetAllAsync(count, page, searchText);
+
+            var response = new
+            {
+                data = admissions,
+                totalItems
+            };
+
+            return Ok(response);
         }
 
         [HttpGet("{id}")]

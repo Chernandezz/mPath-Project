@@ -34,4 +34,5 @@ export class AdmissionService {
   create(admission: CreateAdmissionRequestDto): Observable<Admission> {
     return this.httpService.post<Admission>(this.route, admission);
   }
+
 }
