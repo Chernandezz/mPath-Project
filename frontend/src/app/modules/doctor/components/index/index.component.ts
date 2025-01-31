@@ -12,6 +12,7 @@ import { catchError, tap, throwError } from 'rxjs';
   selector: 'app-index',
   imports: [SharedModule],
   templateUrl: './index.component.html',
+  styleUrls: ['./index.component.scss'],
 })
 export class IndexComponent implements OnInit {
   displayedColumns = ['id', 'firstName', 'lastName', 'actions'];
@@ -46,14 +47,13 @@ export class IndexComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.dataSource.data = response.data;
-          
+
           this.totalItems = response.totalItems;
         },
         error: (error) =>
           console.error('Subscription error in loadDoctors:', error),
       });
   }
-
 
   createDoctor() {
     const dialogRef = this.dialog.open(FormComponent, {

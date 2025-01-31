@@ -1,32 +1,36 @@
-<div class="app-panel-container">
-  <div class="container">
-    <div class="row d-flex">
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2">
-        <mat-card [routerLink]="['/admission']">
-          <mat-icon>event_available</mat-icon>
-          <p>Admission</p>
-        </mat-card>
-      </div>
+<div class="router-container">
+  <div class="app-panel-container">
+    <div class="container">
+      <div class="row">
 
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2">
-        <mat-card [routerLink]="['/discharge']">
-          <mat-icon>event_busy</mat-icon>
-          <p>Discharge</p>
-        </mat-card>
-      </div>
+        <div class="col-6  p-2">
+          <mat-card [routerLink]="['/admission']">
+            <mat-icon>event_available</mat-icon>
+            <p>Admission</p>
+          </mat-card>
+        </div>
 
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2" *ngIf="role === 'Admin'">
-        <mat-card [routerLink]="['/doctor']">
-          <mat-icon>badge</mat-icon>
-          <p>Doctors</p>
-        </mat-card>
-      </div>
+        <div class="col-6 p-2">
+          <mat-card [routerLink]="['/discharge']">
+            <mat-icon>event_busy</mat-icon>
+            <p>Discharge</p>
+          </mat-card>
+        </div>
 
-      <div class="col-6 col-sm-4 col-md-3 col-lg-2 p-2" *ngIf="role === 'Admin' || role === 'Doctor'">
-        <mat-card [routerLink]="['/patient']">
-          <mat-icon>co_present</mat-icon>
-          <p>Patients</p>
-        </mat-card>
+        <div class="col-6 p-2" *ngIf="role === 'Admin'">
+          <mat-card [routerLink]="['/doctor']">
+            <mat-icon>badge</mat-icon>
+            <p>Doctors</p>
+          </mat-card>
+        </div>
+
+        <div class="col-6 p-2" *ngIf="role === 'Admin' || role === 'Doctor'">
+          <mat-card [routerLink]="['/patient']">
+            <mat-icon>co_present</mat-icon>
+            <p>Patients</p>
+          </mat-card>
+        </div>
+
       </div>
     </div>
   </div>

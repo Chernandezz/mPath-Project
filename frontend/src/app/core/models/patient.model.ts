@@ -1,24 +1,24 @@
 export interface Patient {
-  Id: number;
-  FirstName: string;
-  LastName: string;
-  Address: string;
-  PhoneNumber: string;
-  Observations?: string;
+  id: number;
+  firstName: string;
+  lastName: string;
+  address: string;
+  phoneNumber: string;
+  observations?: string;
 }
 
 export interface CreatePatientRequestDto {
-  FirstName: string;
-  LastName: string;
-  Address: string;
-  PhoneNumber: string;
-  Observations?: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  phoneNumber: string;
+  observations?: string;
 }
 
 export interface UpdatePatientRequestDto {
-  FirstName: string;
-  LastName: string;
-  Address: string;
-  PhoneNumber: string;
-  Observations?: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  phoneNumber: string;
+  observations?: string;
 }

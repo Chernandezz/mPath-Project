@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { SharedModule } from '../../../global/shared.module';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { HttpService } from '../../../../services/http.service';
-import { ToastrService } from 'ngx-toastr';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
+import { AdmissionService } from '../../../../core/services/admission.service';
+import { Admission } from '../../../../core/models/admission.model';
 import { FormComponent } from '../form/form.component';
 import { DetailsDialogComponent } from '../details-dialog/details-dialog.component';
+import { SharedModule } from '../../../global/shared.module';
 
 @Component({
   selector: 'app-index',
-  standalone: true,
   imports: [SharedModule],
   templateUrl: './index.component.html',
-  styleUrl: './index.component.scss',
+  styleUrls: ['./index.component.scss'],
 })
 export class IndexComponent implements OnInit {
-  displayedColumns: string[] = [
+  displayedColumns = [
     'id',
     'admissionDate',
     'diagnosis',
@@ -23,71 +23,54 @@ export class IndexComponent implements OnInit {
     'doctorId',
     'patientId',
   ];
-  dataSource = new MatTableDataSource<any>([]);
-
+  dataSource = new MatTableDataSource<Admission>([]);
   totalItems = 0;
   pageCount = 10;
   pageNumber = 0;
-  paginationOptions: number[] = [1, 5, 10, 25, 100];
-
   searchText = '';
+  paginationOptions: number[] = [5, 10, 25, 50];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
-    private httpService: HttpService,
-    private toastr: ToastrService,
+    private admissionService: AdmissionService,
     public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.GetAll();
+    this.loadAdmissions();
   }
 
-  GetAll() {
-    this.httpService
-      .GetAll(this.pageCount, this.pageNumber, this.searchText, 'Admission')
-      .subscribe((response: any) => {
+  loadAdmissions() {
+    this.admissionService
+      .getAll(this.pageCount, this.pageNumber, this.searchText)
+      .subscribe((response) => {
         this.dataSource.data = response.data;
         this.totalItems = response.totalItems;
       });
   }
 
-  handlePageEvent(event: any) {
+  handlePageEvent(event: PageEvent) {
     this.pageCount = event.pageSize;
     this.pageNumber = event.pageIndex;
-
-    this.GetAll();
-  }
-
-  openDetails(row: any) {
-    const dialogRef = this.dialog.open(DetailsDialogComponent, {
-      width: '600px',
-      data: row,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        console.log('Dialog closed with:', result);
-      }
-    });
+    this.loadAdmissions();
   }
 
   createAdmission() {
     const dialogRef = this.dialog.open(FormComponent, {
-      disableClose: true,
-      autoFocus: true,
-      closeOnNavigation: false,
-      position: { top: '30px' },
       width: '700px',
-      data: {
-        type: 'Create',
-      },
+      data: { type: 'Create' },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result !== false) {
-        this.toastr.success('Admission created succesfully', 'Confirmation');
-        this.GetAll();
-      }
+      if (result !== false) this.loadAdmissions();
+    });
+  }
+
+  openDetails(admission: Admission) {
+    this.dialog.open(DetailsDialogComponent, {
+      data: admission,
+      width: '500px',
     });
   }
 }

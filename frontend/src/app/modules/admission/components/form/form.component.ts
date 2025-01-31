@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpService } from '../../../../services/http.service';
 import { SharedModule } from '../../../global/shared.module';
+import { HttpService } from '../../../../core/services/http.service';
 
 @Component({
   selector: 'app-form',
@@ -18,6 +18,9 @@ export class FormComponent implements OnInit {
 
   readonly dialogRef = inject(MatDialogRef<FormComponent>);
   data = inject(MAT_DIALOG_DATA);
+  httpDoctor: any;
+  httpPatient: any;
+  httpAdmission: any;
 
   constructor(private fb: FormBuilder, private httpService: HttpService) {}
 
@@ -38,13 +41,13 @@ export class FormComponent implements OnInit {
   }
 
   loadDoctors() {
-    this.httpService.GetAll(100, 0, '', 'Doctor').subscribe((response: any) => {
+    this.httpDoctor.GetAll(100, 0, '', 'Doctor').subscribe((response: any) => {
       this.doctors = response.data;
     });
   }
 
   loadPatients() {
-    this.httpService
+    this.httpPatient
       .GetAll(100, 0, '', 'Patient')
       .subscribe((response: any) => {
         this.patients = response.data;
@@ -58,7 +61,7 @@ export class FormComponent implements OnInit {
   save() {
     if (this.formGroup.valid) {
       const formData = this.formGroup.value;
-      this.httpService
+      this.httpAdmission
         .CreateAdmission(
           formData.patientId,
           formData.doctorId,

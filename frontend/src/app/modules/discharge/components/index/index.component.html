@@ -1,15 +1,15 @@
 <mat-toolbar>
   <div class="container-fluid">
-    <div class="row">
+    <div class="row d-flex justify-content-between align-items-center">
       <div class="col-6">
         <button mat-flat-button (click)="createDischarge()" color="primary" class="my-2">
           <mat-icon>add_circle_outline</mat-icon>Create
         </button>
       </div>
-      <div class="col-6">
+      <div class="col-6 mt-3 w-25">
         <mat-form-field appearance="fill">
           <mat-label>Search</mat-label>
-          <input [(ngModel)]="searchText" (keyup)="GetAll()" matInput placeholder="Enter a value" />
+          <input [(ngModel)]="searchText" (keyup)="loadDischarges()" matInput placeholder="Enter a value" />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
       </div>
@@ -46,6 +46,17 @@
           <ng-container matColumnDef="amount">
             <th mat-header-cell *matHeaderCellDef class="text-center"> Amount </th>
             <td mat-cell *matCellDef="let element" class="text-center"> {{ element.amount | currency }} </td>
+          </ng-container>
+
+          <!-- Paid Column -->
+          <ng-container matColumnDef="isPaid">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Paid Status </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              <span class="paid-status" [ngClass]="{ 'paid': element.isPaid, 'unpaid': !element.isPaid }">
+                <mat-icon>{{ element.isPaid ? 'check_circle' : 'cancel' }}</mat-icon>
+                {{ element.isPaid ? 'Paid' : 'Not Paid' }}
+              </span>
+            </td>
           </ng-container>
 
           <!-- Admission Id Column -->

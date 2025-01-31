@@ -1,35 +1,78 @@
 .app-panel-container {
-    height: calc(100% - 64px);
-    padding-top: 50px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
 }
 
-.app-panel-container .mat-mdc-card {
-    box-shadow: 0 1px 3px 0 rgba(255, 255, 255, .15), 0 4px 6px 0 rgba(255, 255, 255, .15) !important;
-    color: rgba(255, 255, 255, .8);
-    text-align: center;
-    cursor: pointer;
-    transition: all .25s ease, transform .25s ease;
-    font-weight: bold;
-    border-bottom: #3F5185 2px solid;
-    border-radius: 0;
+.container {
+  max-width: 1200px;
 }
 
-.app-panel-container .mat-mdc-card:hover {
-    background-color: rgba(0, 0, 0, .2);
-    transform: translateY(-3px);
-    box-shadow: 0 0 35px rgba(255, 255, 255, .25) !important;
+.row {
+  justify-content: space-between;
 }
 
-.app-panel-container .mat-mdc-card p {
-    margin-top: 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: #3F5185;
+.mat-mdc-card {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px; /* Bordes más suaves */
+  backdrop-filter: blur(12px);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  padding: 30px;
+  min-height: 180px;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.4);
 }
 
-.app-panel-container .mat-mdc-card .mat-icon{
-  transform: scale(3);
-  margin: 40px auto 20px auto;
-  color: #3F5185;
+.mat-mdc-card:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.mat-mdc-card p {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #3f5185;
+  margin-top: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mat-mdc-card .mat-icon {
+    font-size: 60px;
+  width: auto;
+  height: auto;
+  transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+  color: #3f5185;
+}
+
+.mat-mdc-card:hover .mat-icon {
+  transform: scale(1.3);
+  color: #2a3a67;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .mat-mdc-card {
+    min-height: 140px;
+    min-width: 140px;
+    padding: 15px;
+  }
+
+  .mat-mdc-card .mat-icon {
+    font-size: 50px;
+  }
+
+  .mat-mdc-card p {
+    font-size: 1rem;
+  }
 }

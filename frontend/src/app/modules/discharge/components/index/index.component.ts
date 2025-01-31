@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { SharedModule } from '../../../global/shared.module';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { HttpService } from '../../../../services/http.service';
-import { ToastrService } from 'ngx-toastr';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
+import { DischargeService } from '../../../../core/services/discharge.service';
+import { Discharge } from '../../../../core/models/discharge.model';
+import { SharedModule } from '../../../global/shared.module';
 import { FormComponent } from '../form/form.component';
 import { DetailsDialogComponent } from '../details-dialog/details-dialog.component';
 
@@ -12,81 +13,65 @@ import { DetailsDialogComponent } from '../details-dialog/details-dialog.compone
   standalone: true,
   imports: [SharedModule],
   templateUrl: './index.component.html',
-  styleUrl: './index.component.scss',
+  styleUrls: ['./index.component.scss'],
 })
 export class IndexComponent implements OnInit {
-  displayedColumns: string[] = [
+  displayedColumns = [
     'id',
     'treatment',
     'dischargeDate',
     'amount',
+    'isPaid',
     'admissionId',
   ];
-  dataSource = new MatTableDataSource<any>([]);
-
+  dataSource = new MatTableDataSource<Discharge>([]);
   totalItems = 0;
   pageCount = 10;
   pageNumber = 0;
-  paginationOptions: number[] = [1, 5, 10, 25, 100];
-
   searchText = '';
+  paginationOptions: number[] = [5, 10, 25, 50];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
-    private httpService: HttpService,
-    private toastr: ToastrService,
+    private dischargeService: DischargeService,
     public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    this.GetAll();
+    this.loadDischarges();
   }
 
-  GetAll() {
-    this.httpService
-      .GetAll(this.pageCount, this.pageNumber, this.searchText, 'Discharge')
-      .subscribe((response: any) => {
+  loadDischarges() {
+    this.dischargeService
+      .getAll(this.pageCount, this.pageNumber, this.searchText)
+      .subscribe((response) => {
         this.dataSource.data = response.data;
         this.totalItems = response.totalItems;
       });
   }
 
-  handlePageEvent(event: any) {
+  handlePageEvent(event: PageEvent) {
     this.pageCount = event.pageSize;
     this.pageNumber = event.pageIndex;
-
-    this.GetAll();
-  }
-
-  openDetails(row: any) {
-    const dialogRef = this.dialog.open(DetailsDialogComponent, {
-      width: '600px',
-      data: row,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        console.log('Dialog closed with:', result);
-      }
-    });
+    this.loadDischarges();
   }
 
   createDischarge() {
     const dialogRef = this.dialog.open(FormComponent, {
-      disableClose: true,
-      autoFocus: true,
-      closeOnNavigation: false,
-      position: { top: '30px' },
       width: '700px',
-      data: {
-        type: 'Create',
-      },
+      data: { type: 'Create' },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result !== false) {
-        this.toastr.success('Discharge created successfully', 'Confirmation');
-        this.GetAll();
-      }
+      if (result !== false) this.loadDischarges();
+    });
+  }
+
+  openDetails(discharge: Discharge) {
+    this.dialog.open(DetailsDialogComponent, {
+      data: discharge,
+      width: '500px',
     });
   }
 }

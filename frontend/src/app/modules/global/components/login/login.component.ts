@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpService } from '../../../../services/http.service';
 import { SharedModule } from '../../shared.module';
+import { AuthService } from '../../../../core/services/auth.service';
+import { HttpService } from '../../../../core/services/http.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +24,7 @@ export class LoginComponent {
   ) {}
 
   onLogin() {
-    this.httpService.login(this.email, this.password).subscribe({
+    this.authService.login(this.email, this.password).subscribe({
       next: (response: any) => {
 
         if (response && response.accessToken) {

@@ -5,6 +5,7 @@ import {
   CreateAdmissionRequestDto,
 } from '../models/admission.model';
 import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ import { Observable } from 'rxjs';
 export class AdmissionService {
   private readonly route = 'Admission';
 
-  constructor(private httpService: HttpService) {}
+  constructor(private httpService: HttpService, private httpClient: HttpClient) {}
 
   getAll(
     count: number,
@@ -31,8 +32,27 @@ export class AdmissionService {
     return this.httpService.get<Admission>(`${this.route}/${id}`);
   }
 
-  create(admission: CreateAdmissionRequestDto): Observable<Admission> {
-    return this.httpService.post<Admission>(this.route, admission);
-  }
+  CreateAdmission(
+    patientId: number,
+    doctorId: number,
+    admissionDate: string,
+    diagnosis: string,
+    observation: string
+  ) {
+    const body = {
+      patientId: patientId,
+      doctorId: doctorId,
+      admissionDate: admissionDate,
+      diagnosis: diagnosis,
+      observation: observation,
+    };
 
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.httpClient.post('http://localhost:8080/api/Admission', body, {
+      headers: headers,
+    });
+  }
 }

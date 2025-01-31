@@ -40,11 +40,5 @@ export class PatientService {
     return this.httpService.put<void>(this.route, id, patient);
   }
 
-  deactivate(id: number): Observable<void> {
-    return this.httpService.deactivate(this.route, id);
-  }
 
-  activate(id: number): Observable<void> {
-    return this.httpService.activate(this.route, id);
-  }
 }

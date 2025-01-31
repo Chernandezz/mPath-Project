@@ -1,8 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpService } from '../../../../services/http.service';
 import { SharedModule } from '../../../global/shared.module';
+import { HttpService } from '../../../../core/services/http.service';
+import { AdmissionService } from '../../../../core/services/admission.service';
 
 @Component({
   selector: 'app-form',
@@ -18,7 +19,7 @@ export class FormComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<FormComponent>);
   data = inject(MAT_DIALOG_DATA);
 
-  constructor(private fb: FormBuilder, private httpService: HttpService) {}
+  constructor(private fb: FormBuilder, private httpService: HttpService, private admissionService: AdmissionService) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -36,11 +37,11 @@ export class FormComponent implements OnInit {
   }
 
   loadAdmissions() {
-    this.httpService
-      .GetAll(100, 0, '', 'Admission')
-      .subscribe((response: any) => {
+    this.admissionService.getAll(100, 0, '').subscribe(
+      (response: any) => {
         this.admissions = response.data;
-      });
+      }
+    );
   }
 
   cancel() {
@@ -50,7 +51,7 @@ export class FormComponent implements OnInit {
   save() {
     if (this.formGroup.valid) {
       const formData = this.formGroup.value;
-      this.httpService
+      this.admissionService
         .CreateAdmission(
           formData.patientId,
           formData.doctorId,

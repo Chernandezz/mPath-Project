@@ -1,38 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { SharedModule } from '../../shared.module';
-import { Router, RouterOutlet } from '@angular/router';
-import { HttpService } from '../../../../services/http.service';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
+import { SharedModule } from '../../shared.module';
 
 @Component({
   selector: 'app-header',
-  standalone: true,
-  imports: [SharedModule, RouterOutlet],
+  imports: [SharedModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  role: string | null = null;
-  constructor(
-    private router: Router,
-    private httpService: HttpService,
-    private authService: AuthService
-  ) {}
+  isLoggedIn = false;
 
-  navigateBasedOnAuth() {
-    if (this.httpService.isLoggedIn()) {
-      this.router.navigate(['/login']);
-    } else {
-      this.router.navigate(['/']);
-    }
-  }
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.role = this.authService.getUserRole();
+    this.authService.isAuthenticated().subscribe((status) => {
+      this.isLoggedIn = status;
+    });
   }
 
-  logout() {
-    this.httpService.logout();
-    this.router.navigate(['/login']);
+  logout(): void {
+    this.authService.logout();
   }
 }
