@@ -8,7 +8,7 @@ import { LoginRequestDto, LoginResponseDto } from '../models/user.model';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5247/api/User';
+  private apiUrl = 'http://localhost:8080/api/User';
 
   constructor(private http: HttpClient, private router: Router) {}
 

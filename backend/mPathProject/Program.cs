@@ -106,7 +106,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "mPath API v1"));
 }
-/*
+
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -122,7 +122,7 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"Error applying migrations: {ex.Message}");
     }
 }
-*/
+
 
 app.UseCors("AllowAll");
 app.UseAuthentication();
