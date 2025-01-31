@@ -35,11 +35,9 @@ export class IndexComponent implements OnInit {
   }
 
   deactivateDoctor(doctorId: number) {
-    if (confirm(`Are you sure you want to remove doctor (ID: ${doctorId})?`)) {
-      this.doctorService.deactivate(doctorId).subscribe(() => {
-        this.loadDoctors();
-      });
-    }
+    this.doctorService.deactivate(doctorId).subscribe(() => {
+      this.loadDoctors();
+    });
   }
 
   loadDoctors() {

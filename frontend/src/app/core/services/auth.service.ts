@@ -29,11 +29,28 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('accessToken');
-  }
-
   getToken(): string | null {
     return localStorage.getItem('accessToken');
+  }
+
+  isTokenValid(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+
+    const payload = this.decodeToken(token);
+    if (!payload || !payload.exp) return false;
+
+    const currentTime = Math.floor(Date.now() / 1000); 
+    return payload.exp > currentTime;
+  }
+
+  private decodeToken(token: string): any {
+    try {
+      const base64Url = token.split('.')[1]; 
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(base64)); 
+    } catch (error) {
+      return null;
+    }
   }
 }

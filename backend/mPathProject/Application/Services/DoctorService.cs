@@ -2,6 +2,7 @@
 using mPathProject.Application.DTOs;
 using mPathProject.Application.Interfaces;
 using mPathProject.Domain.Entities;
+using mPathProject.Infrastructure.Authentication;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,13 +12,13 @@ namespace mPathProject.Application.Services
     public class DoctorService : IDoctorService
     {
         private readonly IDoctorRepository _doctorRepository;
+        private readonly IUserService _userService;
 
-        public DoctorService(IDoctorRepository doctorRepository)
+        public DoctorService(IDoctorRepository doctorRepository, IUserService userService)
         {
             _doctorRepository = doctorRepository;
+            _userService = userService;
         }
-
-        
 
 
         public async Task<(List<DoctorDto>, int totalItems)> GetAllAsync(int count, int page, string searchText)
@@ -50,8 +51,17 @@ namespace mPathProject.Application.Services
 
         public async Task<DoctorDto> CreateAsync(CreateDoctorRequestDto doctorDto)
         {
+            var user = await _userService.CreateAsync(new CreateUserRequestDto
+            {
+                Email = doctorDto.Email,
+                Password = PasswordHashHandler.HashPassword(doctorDto.Password),
+                UserRole = "Doctor"
+            });
+
+
             var doctor = new Doctor
             {
+                Id = user.Id,
                 FirstName = doctorDto.FirstName,
                 LastName = doctorDto.LastName,
                 Active = doctorDto.Active

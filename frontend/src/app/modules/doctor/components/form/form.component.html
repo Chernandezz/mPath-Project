@@ -46,6 +46,21 @@
                 Please enter a valid email address
               </mat-error>
           </mat-form-field>
+          
+        </div>
+
+        <div class="col-6">
+          <mat-form-field class="example-full-width">
+            <mat-label>Password</mat-label>
+            <input formControlName="password" type="password" matInput name="password">
+            <mat-error *ngIf="formGroup.get('password')?.hasError('required')">
+              First name is <strong>required</strong>
+            </mat-error>
+            <mat-error
+              *ngIf="formGroup.get('password')?.hasError('password') && !formGroup.get('password')?.hasError('required')">
+              Please enter a valid password
+            </mat-error>
+          </mat-form-field>
         </div>
       </div>
     </div>

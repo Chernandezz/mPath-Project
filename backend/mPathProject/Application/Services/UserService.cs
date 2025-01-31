@@ -46,7 +46,7 @@ namespace mPathProject.Application.Services
             var user = new User
             {
                 Email = userDto.Email,
-                Password = PasswordHashHandler.HashPassword(userDto.Password),
+                Password = userDto.Password,
                 UserRole = userDto.UserRole
             };
 
