@@ -7,6 +7,7 @@ import { admissionRoutes } from './modules/admission/admission.routing';
 import { patientRoutes } from './modules/patient/patient.routing';
 import { dischargeRoutes } from './modules/discharge/discharge.routing';
 import { HeaderComponent } from './modules/global/components/header/header.component';
+import { recommendationRoutes } from './modules/recommendation/recommendation.routing';
 
 export const routes: Routes = [
   { path: '', component: IndexComponent, canActivate: [AuthGuard] },
@@ -15,6 +16,7 @@ export const routes: Routes = [
   ...admissionRoutes,
   ...patientRoutes,
   ...dischargeRoutes,
+  ...recommendationRoutes,
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 

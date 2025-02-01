@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DoctorService } from '../../../../core/services/doctor.service';
 import { SharedModule } from '../../../global/shared.module';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-form',
@@ -14,7 +15,7 @@ export class FormComponent implements OnInit {
   readonly dialogRef = inject(MatDialogRef<FormComponent>);
   data = inject(MAT_DIALOG_DATA);
 
-  constructor(private doctorService: DoctorService, private fb: FormBuilder) {}
+  constructor(private doctorService: DoctorService, private fb: FormBuilder, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -29,8 +30,14 @@ export class FormComponent implements OnInit {
       const formData = this.formGroup.value;
 
       this.doctorService.create(formData).subscribe({
-        next: () => this.dialogRef.close(formData),
-        error: (error) => console.error('Error:', error),
+        next: () => {
+          this.toastr.success('Doctor created', 'Success');
+          this.dialogRef.close(formData);
+        },
+        error: (error) => {
+          console.error('Error:', error);
+          this.toastr.error('Error creating doctor', 'Error');
+        },
       });
     } else {
       this.markFormGroupTouched(this.formGroup);

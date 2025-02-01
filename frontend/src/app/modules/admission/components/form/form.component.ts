@@ -3,6 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedModule } from '../../../global/shared.module';
 import { HttpService } from '../../../../core/services/http.service';
+import { DoctorService } from '../../../../core/services/doctor.service';
+import { AdmissionService } from '../../../../core/services/admission.service';
+import { PatientService } from '../../../../core/services/patient.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-form',
@@ -18,11 +22,15 @@ export class FormComponent implements OnInit {
 
   readonly dialogRef = inject(MatDialogRef<FormComponent>);
   data = inject(MAT_DIALOG_DATA);
-  httpDoctor: any;
-  httpPatient: any;
-  httpAdmission: any;
 
-  constructor(private fb: FormBuilder, private httpService: HttpService) {}
+  constructor(
+    private fb: FormBuilder,
+    private httpService: HttpService,
+    private httpDoctor: DoctorService,
+    private httpAdmission: AdmissionService,
+    private httpPatient: PatientService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -41,17 +49,15 @@ export class FormComponent implements OnInit {
   }
 
   loadDoctors() {
-    this.httpDoctor.GetAll(100, 0, '', 'Doctor').subscribe((response: any) => {
+    this.httpDoctor.getAll(100, 0, '').subscribe((response: any) => {
       this.doctors = response.data;
     });
   }
 
   loadPatients() {
-    this.httpPatient
-      .GetAll(100, 0, '', 'Patient')
-      .subscribe((response: any) => {
-        this.patients = response.data;
-      });
+    this.httpPatient.getAll(100, 0, '').subscribe((response: any) => {
+      this.patients = response.data;
+    });
   }
 
   cancel() {
@@ -61,17 +67,16 @@ export class FormComponent implements OnInit {
   save() {
     if (this.formGroup.valid) {
       const formData = this.formGroup.value;
-      this.httpAdmission
-        .CreateAdmission(
-          formData.patientId,
-          formData.doctorId,
-          formData.admissionDate,
-          formData.diagnosis,
-          formData.observation
-        )
-        .subscribe(() => {
-          this.dialogRef.close(true);
-        });
+      this.httpAdmission.create(formData).subscribe({
+        next: () => {
+          this.toastr.success('Admission created', 'Success');
+          this.dialogRef.close(formData);
+        },
+        error: (error) => {
+          console.error('Error:', error);
+          this.toastr.error('Error creating admission', 'Error');
+        },
+      });
     } else {
       this.markFormGroupTouched(this.formGroup);
     }
@@ -87,3 +92,4 @@ export class FormComponent implements OnInit {
     });
   }
 }
+

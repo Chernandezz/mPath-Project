@@ -16,7 +16,7 @@
 
 .mat-mdc-card {
   background: rgba(255, 255, 255, 0.2);
-  border-radius: 16px; /* Bordes más suaves */
+  border-radius: 16px; 
   backdrop-filter: blur(12px);
   text-align: center;
   cursor: pointer;
@@ -60,7 +60,7 @@
   color: #2a3a67;
 }
 
-/* Responsivo */
+
 @media (max-width: 768px) {
   .mat-mdc-card {
     min-height: 140px;
