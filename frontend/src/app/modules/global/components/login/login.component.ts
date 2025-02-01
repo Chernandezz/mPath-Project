@@ -1,43 +1,65 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { SharedModule } from '../../shared.module';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
-import { HttpService } from '../../../../core/services/http.service';
+import { ToastrService } from 'ngx-toastr';
+import { SharedModule } from '../../shared.module';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [CommonModule, FormsModule, SharedModule],
+  imports: [SharedModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  email: string = '';
-  password: string = '';
+  formGroup!: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private httpService: HttpService
-  ) {}
+    private toastr: ToastrService
+  ) {
+    this.formGroup = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+    });
+  }
 
   onLogin() {
-    this.authService.login(this.email, this.password).subscribe({
-      next: (response: any) => {
+    
+    if (this.formGroup.invalid) {
+      this.toastr.warning(
+        'Please complete all required fields',
+        'Validation Error',
+        {
+          closeButton: true,
+          timeOut: 3000,
+          progressBar: true,
+        }
+      );
+      return;
+    }
+    const { email, password } = this.formGroup.value;
 
-        if (response && response.accessToken) {
+    this.authService.login(email, password).subscribe({
+      next: (response: any) => {
+        if (response?.accessToken) {
           localStorage.setItem('accessToken', response.accessToken);
-          this.router.navigate(['']); 
+          this.router.navigate(['']);
         } else {
-          console.error('Error: No accessToken received');
-          alert('Invalid login credentials');
+          this.toastr.error('Invalid login credentials', 'Login Error');
         }
       },
       error: (error) => {
         console.error('Login failed', error);
-        alert('Invalid login credentials');
+
+        if (error.status === 401) {
+          this.toastr.error('Incorrect username or password', 'Login Error');
+        } else {
+          this.toastr.error('An unexpected error occurred', 'Login Error');
+        }
       },
     });
   }
