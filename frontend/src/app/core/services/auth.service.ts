@@ -16,12 +16,17 @@ export class AuthService {
   constructor(private httpClient: HttpClient, private router: Router) {}
 
   login(email: string, password: string): Observable<any> {
+    
+    
     const url = `${this.apiUrl}/Login`;
 
     return this.httpClient.post(url, { email, password }).pipe(
       tap((response: any) => {
         if (response?.accessToken) {
           localStorage.setItem('accessToken', response.accessToken);
+
+          let payload = this.decodeToken(response.accessToken);
+          localStorage.setItem('userId', payload.userId);
           this.isAuthenticatedSubject.next(true);
         }
       })
@@ -51,6 +56,10 @@ export class AuthService {
   }
 
   isAuthenticated(): Observable<boolean> {
+    const token = this.getToken();
+    if (token) {
+      console.log(this.decodeToken(token));
+    }
     return this.isAuthenticatedSubject.asObservable();
   }
   isTokenValid(): boolean {
@@ -64,7 +73,7 @@ export class AuthService {
     return payload.exp > currentTime;
   }
 
-  private decodeToken(token: string): any {
+  private decodeToken(token: string ): any {
     try {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

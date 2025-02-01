@@ -57,6 +57,8 @@ export class IndexComponent implements OnInit {
     this.loadDischarges();
   }
 
+  
+
   createDischarge() {
     const dialogRef = this.dialog.open(FormComponent, {
       width: '700px',

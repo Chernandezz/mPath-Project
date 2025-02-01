@@ -67,4 +67,42 @@ export class HttpService {
       }
     );
   }
+
+  getAllRecommendationsById<T>(
+    count: number = 10,
+    page: number = 0,
+    searchText: string = '',
+    userId: number
+  ): Observable<T> {
+    const params = new HttpParams()
+      .set('count', count.toString())
+      .set('page', page.toString())
+      .set('searchText', searchText)
+      .set('userId', userId.toString());
+
+    return this.httpClient.get<T>(`${this.apiBase}/Discharge/recommendations`, {
+      headers: this.getAuthHeaders(),
+      params,
+    });
+  }
+
+  deactivateRecommendation<T>(route: string, id: number): Observable<T> {
+    return this.httpClient.put<T>(
+      `${this.apiBase}/${route}/${id}/deactivate`,
+      null,
+      {
+        headers: this.getAuthHeaders(),
+      }
+    );
+  }
+
+  activateRecommendation<T>(route: string, id: number): Observable<T> {
+    return this.httpClient.put<T>(
+      `${this.apiBase}/${route}/${id}/activate`,
+      null,
+      {
+        headers: this.getAuthHeaders(),
+      }
+    );
+  }
 }

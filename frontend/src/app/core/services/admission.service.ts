@@ -13,7 +13,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class AdmissionService {
   private readonly route = 'Admission';
 
-  constructor(private httpService: HttpService, private httpClient: HttpClient) {}
+  constructor(
+    private httpService: HttpService,
+    private httpClient: HttpClient
+  ) {}
 
   getAll(
     count: number,
@@ -32,27 +35,8 @@ export class AdmissionService {
     return this.httpService.get<Admission>(`${this.route}/${id}`);
   }
 
-  CreateAdmission(
-    patientId: number,
-    doctorId: number,
-    admissionDate: string,
-    diagnosis: string,
-    observation: string
-  ) {
-    const body = {
-      patientId: patientId,
-      doctorId: doctorId,
-      admissionDate: admissionDate,
-      diagnosis: diagnosis,
-      observation: observation,
-    };
 
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    return this.httpClient.post('http://localhost:8080/api/Admission', body, {
-      headers: headers,
-    });
+  create(admission: CreateAdmissionRequestDto): Observable<Admission> {
+    return this.httpService.post<Admission>(this.route, admission);
   }
 }
