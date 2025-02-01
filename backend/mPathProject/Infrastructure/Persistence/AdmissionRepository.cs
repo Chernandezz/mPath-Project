@@ -25,7 +25,19 @@ namespace mPathProject.Infrastructure.Persistence
             int totalItems = await query.CountAsync();
             return (await query.Skip(page * count).Take(count).ToListAsync(), totalItems);
         }
+        public async Task<(List<Admission>, int totalItems)> GetAllByPatientIdAsync(int count, int page, string searchText, long patientId)
+        {
+            var query = _context.Admissions
+                .Where(a => a.PatientId == patientId)
+                .AsQueryable();
 
+            if (!string.IsNullOrEmpty(searchText))
+                query = query.Where(a => a.Diagnosis.Contains(searchText) || a.Observation.Contains(searchText));
+
+            int totalItems = await query.CountAsync();
+            var result = await query.Skip(page * count).Take(count).ToListAsync();
+            return (result, totalItems);
+        }
         public async Task<Admission> GetByIdAsync(long id)
         {
             return await _context.Admissions.FindAsync(id);

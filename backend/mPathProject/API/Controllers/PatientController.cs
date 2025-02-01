@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using mPathProject.Domain.Entities;
 using System.Collections.Generic;
 using mPathProject.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace mPathProject.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PatientController : ControllerBase
     {
         private readonly IPatientService _patientService;

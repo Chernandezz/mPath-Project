@@ -46,6 +46,23 @@ namespace mPathProject.Application.Services
             };
         }
 
+        public async Task<(List<AdmissionDto>, int totalItems)> GetAllByPatientIdAsync(int count, int page, string searchText, long patientId)
+        {
+            var (admissions, totalItems) = await _admissionRepository.GetAllByPatientIdAsync(count, page, searchText, patientId);
+            var admissionDtos = admissions.Select(a => new AdmissionDto
+            {
+                Id = a.Id,
+                AdmissionDate = a.AdmissionDate,
+                Diagnosis = a.Diagnosis,
+                Observation = a.Observation,
+                DoctorId = a.DoctorId,
+                PatientId = a.PatientId
+            }).ToList();
+
+            return (admissionDtos, totalItems);
+        }
+
+
         public async Task<AdmissionDto> CreateAsync(CreateAdmissionRequestDto admissionDto)
         {
             var admission = new Admission

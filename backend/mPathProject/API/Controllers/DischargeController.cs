@@ -3,11 +3,13 @@ using mPathProject.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using mPathProject.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace mPathProject.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DischargeController : ControllerBase
     {
         private readonly IDischargeService _dischargeService;

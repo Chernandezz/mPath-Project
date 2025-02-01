@@ -19,6 +19,7 @@ namespace mPathProject.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var users = await _userService.GetAllAsync();
@@ -26,6 +27,7 @@ namespace mPathProject.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetById(long id)
         {
             var user = await _userService.GetByIdAsync(id);
