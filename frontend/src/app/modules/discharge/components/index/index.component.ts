@@ -7,6 +7,7 @@ import { Discharge } from '../../../../core/models/discharge.model';
 import { SharedModule } from '../../../global/shared.module';
 import { FormComponent } from '../form/form.component';
 import { DetailsDialogComponent } from '../details-dialog/details-dialog.component';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-index',
@@ -27,6 +28,7 @@ export class IndexComponent implements OnInit {
   totalItems = 0;
   pageCount = 10;
   pageNumber = 0;
+  role: string | null = null;
   userId = Number(localStorage.getItem('userId'));
   userRole = localStorage.getItem('role');
   searchText = '';
@@ -36,11 +38,13 @@ export class IndexComponent implements OnInit {
 
   constructor(
     private dischargeService: DischargeService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.loadDischarges();
+    this.role = this.authService.getUserRole();
   }
 
   loadDischarges() {

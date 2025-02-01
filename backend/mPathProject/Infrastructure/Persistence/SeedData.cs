@@ -95,10 +95,10 @@ namespace mPathProject.Infrastructure.Persistence
                 {
                     new Discharge { AdmissionId = admissions[0].Id, DischargeDate = admissions[0].AdmissionDate.AddDays(7), Recommendation = "Continue antibiotics, follow-up in 2 weeks.", Amount = 500.00m },
                     new Discharge { AdmissionId = admissions[1].Id, DischargeDate = admissions[1].AdmissionDate.AddDays(5), Recommendation = "Monitor blood glucose levels, hydrate well.", Amount = 350.00m },
-                    new Discharge { AdmissionId = admissions[2].Id, DischargeDate = admissions[2].AdmissionDate.AddDays(4), Recommendation = "Use prescribed inhalers, avoid allergens.", Amount = 400.00m },
+                    new Discharge { AdmissionId = admissions[2].Id, DischargeDate = admissions[2].AdmissionDate.AddDays(4), Recommendation = "Use prescribed inhalers, avoid allergens.", Amount = 400.00m, IsPaid = true},
                     new Discharge { AdmissionId = admissions[3].Id, DischargeDate = admissions[3].AdmissionDate.AddDays(6), Recommendation = "Wear cast for 4 weeks, physical therapy needed.", Amount = 700.00m },
-                    new Discharge { AdmissionId = admissions[4].Id, DischargeDate = admissions[4].AdmissionDate.AddDays(3), Recommendation = "Surgery completed, avoid heavy lifting.", Amount = 1200.00m },
-                    new Discharge { AdmissionId = admissions[5].Id, DischargeDate = admissions[5].AdmissionDate.AddDays(10), Recommendation = "Daily BP monitoring, low-sodium diet.", Amount = 600.00m },
+                    new Discharge { AdmissionId = admissions[4].Id, DischargeDate = admissions[4].AdmissionDate.AddDays(3), Recommendation = "Surgery completed, avoid heavy lifting.", Amount = 1200.00m, IsPaid = true},
+                    new Discharge { AdmissionId = admissions[5].Id, DischargeDate = admissions[5].AdmissionDate.AddDays(10), Recommendation = "Daily BP monitoring, low-sodium diet.", Amount = 600.00m, IsPaid = true },
                     new Discharge { AdmissionId = admissions[6].Id, DischargeDate = admissions[6].AdmissionDate.AddDays(2), Recommendation = "Avoid bright lights, take prescribed meds.", Amount = 250.00m }
                 };
 

@@ -1,6 +1,9 @@
 <header>
   <mat-toolbar color="primary">
-    <button mat-icon-button aria-label="Home" routerLink="/">
+    <button mat-icon-button aria-label="Home" routerLink="/" *ngIf="isLoggedIn">
+        <mat-icon >home</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Home" routerLink="/" *ngIf="!isLoggedIn">
       <mat-icon>cloud</mat-icon>
     </button>
     <span>mPath Health</span>
