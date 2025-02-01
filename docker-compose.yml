@@ -23,7 +23,7 @@ services:
       - db
     environment:
       ConnectionStrings__Connection: "Server=db,1433;Database=mPathDB;User Id=sa;Password=StrongPassword!2024;TrustServerCertificate=True;"
-      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_ENVIRONMENT: "Production"
     ports:
       - "8080:8080"
       - "8081:8081"

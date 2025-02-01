@@ -18,11 +18,10 @@ import { DetailsDialogComponent } from '../details-dialog/details-dialog.compone
 export class IndexComponent implements OnInit {
   displayedColumns = [
     'id',
-    'treatment',
+    'recommendation',
     'dischargeDate',
     'amount',
     'isPaid',
-    'admissionId',
   ];
   dataSource = new MatTableDataSource<Discharge>([]);
   totalItems = 0;
