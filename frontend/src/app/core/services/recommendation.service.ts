@@ -15,36 +15,6 @@ export class RecommendationService {
     private httpClient: HttpClient
   ) {}
 
-  getAll(
-    count: number,
-    page: number,
-    searchText: string
-  ): Observable<{ data: Recommendation[]; totalItems: number }> {
-    return this.httpService.get<{ data: Recommendation[]; totalItems: number }>(
-      this.route,
-      count,
-      page,
-      searchText
-    );
-  }
-
-  getAllByUserId(
-    count: number,
-    page: number,
-    searchText: string,
-    userId: number
-  ): Observable<{ data: Recommendation[]; totalItems: number }> {
-    return this.httpService.get<{ data: Recommendation[]; totalItems: number }>(
-      `${this.route}/recommendations/?userId=${userId}`,
-      count,
-      page,
-      searchText
-    );
-  }
-
-  getById(id: number): Observable<Recommendation> {
-    return this.httpService.get<Recommendation>(`${this.route}/${id}`);
-  }
 
   deactivateRecommendation(id: number): Observable<void> {
     return this.httpService.deactivate(this.route, id);

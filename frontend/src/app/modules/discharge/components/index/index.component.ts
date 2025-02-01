@@ -28,6 +28,7 @@ export class IndexComponent implements OnInit {
   pageCount = 10;
   pageNumber = 0;
   searchText = '';
+  userId = Number(localStorage.getItem('userId'));
   paginationOptions: number[] = [5, 10, 25, 50];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -43,7 +44,12 @@ export class IndexComponent implements OnInit {
 
   loadDischarges() {
     this.dischargeService
-      .getAll(this.pageCount, this.pageNumber, this.searchText)
+      .getAllByUserId(
+        this.pageCount,
+        this.pageNumber,
+        this.searchText,
+        this.userId
+      )
       .subscribe((response) => {
         this.dataSource.data = response.data;
         this.totalItems = response.totalItems;

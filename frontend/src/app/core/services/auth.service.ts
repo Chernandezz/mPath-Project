@@ -27,6 +27,7 @@ export class AuthService {
 
           let payload = this.decodeToken(response.accessToken);
           localStorage.setItem('userId', payload.userId);
+          localStorage.setItem('role', payload.role);
           this.isAuthenticatedSubject.next(true);
         }
       })

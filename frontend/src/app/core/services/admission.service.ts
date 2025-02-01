@@ -31,8 +31,18 @@ export class AdmissionService {
     );
   }
 
-  getById(id: number): Observable<Admission> {
-    return this.httpService.get<Admission>(`${this.route}/${id}`);
+  getAllByUserId(
+    count: number,
+    page: number,
+    searchText: string,
+    userId: number
+  ): Observable<{ data: Admission[]; totalItems: number }> {
+    return this.httpService.get<{ data: Admission[]; totalItems: number }>(
+      `${this.route}/admissionbyid/?userId=${userId}`,
+      count,
+      page,
+      searchText
+    );
   }
 
 

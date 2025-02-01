@@ -24,6 +24,20 @@ export class DischargeService {
     );
   }
 
+    getAllByUserId(
+      count: number,
+      page: number,
+      searchText: string,
+      userId: number
+    ): Observable<{ data: Discharge[]; totalItems: number }> {
+      return this.httpService.get<{ data: Discharge[]; totalItems: number }>(
+        `${this.route}/recommendations/?userId=${userId}`,
+        count,
+        page,
+        searchText
+      );
+    }
+
   getById(id: number): Observable<Discharge> {
     return this.httpService.get<Discharge>(`${this.route}/${id}`);
   }

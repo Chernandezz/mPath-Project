@@ -28,6 +28,8 @@ export class IndexComponent implements OnInit {
   pageCount = 10;
   pageNumber = 0;
   searchText = '';
+  userId = Number(localStorage.getItem('userId'));
+  userRole = localStorage.getItem('role');
   paginationOptions: number[] = [5, 10, 25, 50];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -42,12 +44,29 @@ export class IndexComponent implements OnInit {
   }
 
   loadAdmissions() {
-    this.admissionService
-      .getAll(this.pageCount, this.pageNumber, this.searchText)
-      .subscribe((response) => {
-        this.dataSource.data = response.data;
-        this.totalItems = response.totalItems;
-      });
+    if(this.userRole === 'Admin') {
+      this.admissionService
+        .getAll(this.pageCount, this.pageNumber, this.searchText)
+        .subscribe((response) => {
+          this.dataSource.data = response.data;
+          this.totalItems = response.totalItems;
+        });
+    }else{
+      this.admissionService
+        .getAllByUserId(
+          this.pageCount,
+          this.pageNumber,
+          this.searchText,
+          this.userId
+        )
+        .subscribe((response) => {
+          this.dataSource.data = response.data;
+          this.totalItems = response.totalItems;
+        });
+    }
+    
+    
+    
   }
 
   handlePageEvent(event: PageEvent) {

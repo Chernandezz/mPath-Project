@@ -5,6 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { SharedModule } from '../../../global/shared.module';
 import { Recommendation } from '../../../../core/models/recommendation.model';
+import { DischargeService } from '../../../../core/services/discharge.service';
+import { Discharge } from '../../../../core/models/discharge.model';
 import { RecommendationService } from '../../../../core/services/recommendation.service';
 
 @Component({
@@ -15,7 +17,7 @@ import { RecommendationService } from '../../../../core/services/recommendation.
 })
 export class IndexComponent implements OnInit {
   displayedColumns = ['id', 'dischargeDate', 'recommendation', 'actions'];
-  dataSource = new MatTableDataSource<Recommendation>([]);
+  dataSource = new MatTableDataSource<Discharge>([]);
   totalItems = 0;
   pageCount = 10;
   pageNumber = 0;
@@ -26,9 +28,10 @@ export class IndexComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
-    private recommendationService: RecommendationService,
     private toastr: ToastrService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private dischargeService: DischargeService,
+    private recommendationService: RecommendationService
   ) {}
 
   ngOnInit(): void {
@@ -36,7 +39,7 @@ export class IndexComponent implements OnInit {
   }
 
   loadRecommendations() {
-    this.recommendationService
+    this.dischargeService
       .getAllByUserId(
         this.pageCount,
         this.pageNumber,

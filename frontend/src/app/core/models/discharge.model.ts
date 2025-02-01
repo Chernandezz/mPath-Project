@@ -5,6 +5,8 @@ export interface Discharge {
   amount: number;
   isPaid: boolean;
   admissionId: number;
+  recommendation: string;
+  completed: boolean;
 }
 
 export interface CreateDischargeRequestDto {

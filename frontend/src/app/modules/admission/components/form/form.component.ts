@@ -7,6 +7,7 @@ import { DoctorService } from '../../../../core/services/doctor.service';
 import { AdmissionService } from '../../../../core/services/admission.service';
 import { PatientService } from '../../../../core/services/patient.service';
 import { ToastrService } from 'ngx-toastr';
+import { Doctor } from '../../../../core/models/doctor.model';
 
 @Component({
   selector: 'app-form',
@@ -49,8 +50,8 @@ export class FormComponent implements OnInit {
   }
 
   loadDoctors() {
-    this.httpDoctor.getAll(100, 0, '').subscribe((response: any) => {
-      this.doctors = response.data;
+    this.httpDoctor.getAll(100, 0, '').subscribe((response: any) => {      
+      this.doctors = response.data.filter((d: any) => d.active);
     });
   }
 
