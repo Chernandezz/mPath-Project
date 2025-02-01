@@ -2,7 +2,7 @@
 {
     public class UpdateDischargeRequestDto
     {
-        public string Treatment { get; set; }
+        public string Recommendation { get; set; }
         public DateTime DischargeDate { get; set; }
         public decimal Amount { get; set; }
         public bool IsPaid { get; set; }

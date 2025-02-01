@@ -21,7 +21,7 @@ namespace mPathProject.Infrastructure.Persistence
             var query = _context.Patients.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchText))
-                query = query.Where(a => a.FirstName.Contains(searchText));
+                query = query.Where(p => p.FirstName.Contains(searchText) || p.LastName.Contains(searchText) || p.Id.ToString() == searchText || p.Observations.Contains(searchText));
 
             int totalItems = await query.CountAsync();
             return (await query.Skip(page * count).Take(count).ToListAsync(), totalItems);

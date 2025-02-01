@@ -21,8 +21,9 @@ namespace mPathProject.Infrastructure.Persistence
             var query = _context.Doctors.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchText))
-                query = query.Where(d => d.FirstName.Contains(searchText));
+                query = query.Where(d => d.FirstName.Contains(searchText) || d.LastName.Contains(searchText) || d.Id.ToString() == searchText);
 
+            
             int totalItems = await query.CountAsync();
             var doctors = await query.OrderByDescending(d=> d.Active).Skip(page * count).Take(count).ToListAsync();
 

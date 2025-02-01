@@ -21,7 +21,7 @@ namespace mPathProject.Infrastructure.Persistence
             var query = _context.Discharges.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchText))
-                query = query.Where(d => d.Treatment.Contains(searchText));
+                query = query.Where(d => d.Recommendation.Contains(searchText) || d.Id.ToString() == searchText);
 
             int totalItems = await query.CountAsync();
             return (await query.Skip(page * count).Take(count).ToListAsync(), totalItems);
@@ -49,5 +49,49 @@ namespace mPathProject.Infrastructure.Persistence
         {
             return await _context.Discharges.AnyAsync(d => d.Id == id);
         }
+
+        public async Task<(List<Discharge>, int totalItems)> GetAllRecommendationsByUserIdAsync(int count, int page, string searchText, long userId)
+        {
+            var query = _context.Discharges
+                .Include(d => d.Admission) 
+                .Where(d => d.Admission.PatientId == userId) 
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchText))
+                query = query.Where(d => d.Recommendation.Contains(searchText));
+
+            int totalItems = await query.CountAsync();
+            var result = await query.Skip(page * count).Take(count).ToListAsync();
+            return (result, totalItems);
+        }
+
+        public async Task<bool> DeactivateAsync(long id)
+        {
+
+            var discharge = await _context.Discharges.FirstOrDefaultAsync(d => d.Id == id);
+
+            if (discharge == null)
+                return false;
+
+            discharge.IsCompleted = false;
+            await _context.SaveChangesAsync();
+            return true;
+
+        }
+
+        public async Task<bool> ActivateAsync(long id)
+        {
+
+            var discharge = await _context.Discharges.FirstOrDefaultAsync(d => d.Id == id);
+
+            if (discharge == null)
+                return false;
+
+            discharge.IsCompleted = true;
+            await _context.SaveChangesAsync();
+            return true;
+
+        }
     }
 }
+

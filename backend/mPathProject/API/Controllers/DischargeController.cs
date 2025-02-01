@@ -52,5 +52,42 @@ namespace mPathProject.API.Controllers
             var updated = await _dischargeService.UpdateAsync(id, dischargeDto);
             return updated ? NoContent() : NotFound();
         }
+
+        [HttpGet("recommendations")]
+        public async Task<IActionResult> GetAllRecommendationsByUserId(int count = 10, int page = 0, string searchText = null, long userId = 0)
+        {
+            (List<DischargeDto> discharges, int totalItems) = await _dischargeService.GetAllRecommendationsByUserIdAsync(count, page, searchText, userId);
+
+            var response = new
+            {
+                data = discharges,
+                totalItems
+            };
+
+            return Ok(response);
+        }
+
+
+        [HttpPut("{id}/activate")]
+        public async Task<IActionResult> ActivateAsync(long id)
+        {
+            bool activated = await _dischargeService.ActivateAsync(id);
+
+            if (!activated)
+                return NotFound(new { message = "Discharge not found" });
+
+            return Ok(new { message = "Discharge activated successfully" });
+        }
+
+        [HttpPut("{id}/deactivate")]
+        public async Task<IActionResult> DeactivateAsync(long id)
+        {
+            bool deactivated = await _dischargeService.DeactivateAsync(id);
+
+            if (!deactivated)
+                return NotFound(new { message = "Discharge not found" });
+
+            return Ok(new { message = "Discharge deactivated successfully" });
+        }
     }
 }

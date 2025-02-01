@@ -9,8 +9,7 @@ namespace mPathProject.Domain.Entities
         public long Id { get; set; }
 
         [Required]
-        [StringLength(255)]
-        public string Treatment { get; set; }
+        public string Recommendation { get; set; }
 
         [Required]
         public System.DateTime DischargeDate { get; set; }
@@ -20,8 +19,8 @@ namespace mPathProject.Domain.Entities
         [Range(0, 9999999.99)]
         public decimal Amount { get; set; }
 
-        [Required]
-        public bool IsPaid { get; set; }
+        public bool IsPaid { get; set; } = false;
+        public bool IsCompleted { get; set; } = false;
 
         [Required]
         [ForeignKey("Admission")]

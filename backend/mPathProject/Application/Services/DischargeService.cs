@@ -16,29 +16,46 @@ namespace mPathProject.Application.Services
         {
             _dischargeRepository = dischargeRepository;
         }
+
+        public async Task<(List<DischargeDto>, int totalItems)> GetAllRecommendationsByUserIdAsync(int count, int page, string searchText, long userId)
+        {
+            var (discharges, totalItems) = await _dischargeRepository.GetAllRecommendationsByUserIdAsync(count, page, searchText, userId);
+            var dischargeDtos = discharges.Select(d => new DischargeDto
+            {
+                Id = d.Id,
+                Recommendation = d.Recommendation,
+                DischargeDate = d.DischargeDate,
+                Amount = d.Amount,
+                IsPaid = d.IsPaid,
+                IsCompleted = d.IsCompleted,
+                AdmissionId = d.AdmissionId
+            }).ToList();
+
+            return (dischargeDtos, totalItems);
+        }
         public async Task<(List<DischargeDto>, int totalItems)> GetAllAsync(int count, int page, string searchText)
         {
             var (discharges, totalItems) = await _dischargeRepository.GetAllAsync(count, page, searchText);
             var dischargeDtos = discharges.Select(d => new DischargeDto
             {
                 Id = d.Id,
-                Treatment = d.Treatment,
+                Recommendation = d.Recommendation,
                 DischargeDate = d.DischargeDate,
                 Amount = d.Amount,
                 IsPaid = d.IsPaid,
+                IsCompleted = d.IsCompleted,
                 AdmissionId = d.AdmissionId
             }).ToList();
 
             return (dischargeDtos, totalItems);
         }
-
         public async Task<DischargeDto> GetByIdAsync(long id)
         {
             var discharge = await _dischargeRepository.GetByIdAsync(id);
             return discharge == null ? null : new DischargeDto
             {
                 Id = discharge.Id,
-                Treatment = discharge.Treatment,
+                Recommendation = discharge.Recommendation,
                 DischargeDate = discharge.DischargeDate,
                 Amount = discharge.Amount,
                 IsPaid = discharge.IsPaid,
@@ -50,10 +67,9 @@ namespace mPathProject.Application.Services
         {
             var discharge = new Discharge
             {
-                Treatment = dischargeDto.Treatment,
+                Recommendation = dischargeDto.Recommendation,
                 DischargeDate = dischargeDto.DischargeDate,
                 Amount = dischargeDto.Amount,
-                IsPaid = dischargeDto.IsPaid,
                 AdmissionId = dischargeDto.AdmissionId
             };
 
@@ -62,7 +78,7 @@ namespace mPathProject.Application.Services
             return new DischargeDto
             {
                 Id = discharge.Id,
-                Treatment = discharge.Treatment,
+                Recommendation = discharge.Recommendation,
                 DischargeDate = discharge.DischargeDate,
                 Amount = discharge.Amount,
                 IsPaid = discharge.IsPaid,
@@ -75,14 +91,23 @@ namespace mPathProject.Application.Services
             var discharge = await _dischargeRepository.GetByIdAsync(id);
             if (discharge == null) return false;
 
-            discharge.Treatment = dischargeDto.Treatment;
+            discharge.Recommendation = dischargeDto.Recommendation;
             discharge.DischargeDate = dischargeDto.DischargeDate;
             discharge.Amount = dischargeDto.Amount;
-            discharge.IsPaid = dischargeDto.IsPaid;
             discharge.AdmissionId = dischargeDto.AdmissionId;
 
             await _dischargeRepository.UpdateAsync(discharge);
             return true;
+        }
+
+        public async Task<bool> DeactivateAsync(long id)
+        {
+            return await _dischargeRepository.DeactivateAsync(id);
+        }
+
+        public async Task<bool> ActivateAsync(long id)
+        {
+            return await _dischargeRepository.ActivateAsync(id);
         }
     }
 }

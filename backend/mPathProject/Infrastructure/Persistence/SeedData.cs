@@ -68,14 +68,19 @@ namespace mPathProject.Infrastructure.Persistence
             // Seed Admissions
             if (!context.Admissions.Any() && doctors.Any() && patients.Any())
             {
-                var newAdmissions = patients.Select((patient, index) => new Admission
+                var newAdmissions = new List<Admission>
                 {
-                    AdmissionDate = DateTime.UtcNow.AddDays(-index * 5),
-                    Diagnosis = $"Diagnosis {index + 1}",
-                    Observation = $"Observation {index + 1}",
-                    DoctorId = doctors[index % doctors.Count].Id,
-                    PatientId = patient.Id
-                }).ToList();
+                    new Admission { AdmissionDate = DateTime.UtcNow.AddDays(-50), Diagnosis = "Pneumonia", Observation = "Severe cough and fever.", DoctorId = doctors[0].Id, PatientId = patients[0].Id },
+                    new Admission { AdmissionDate = DateTime.UtcNow.AddDays(-48), Diagnosis = "Diabetic Ketoacidosis", Observation = "Critical blood sugar levels.", DoctorId = doctors[1].Id, PatientId = patients[0].Id },
+                    new Admission { AdmissionDate = DateTime.UtcNow.AddDays(-45), Diagnosis = "Asthma Attack", Observation = "Difficulty breathing, wheezing.", DoctorId = doctors[2].Id, PatientId = patients[1].Id },
+                    new Admission { AdmissionDate = DateTime.UtcNow.AddDays(-42), Diagnosis = "Fractured Arm", Observation = "Fall injury while exercising.", DoctorId = doctors[3].Id, PatientId = patients[2].Id },
+                    new Admission { AdmissionDate = DateTime.UtcNow.AddDays(-40), Diagnosis = "Appendicitis", Observation = "Severe abdominal pain.", DoctorId = doctors[0].Id, PatientId = patients[3].Id },
+                    new Admission { AdmissionDate = DateTime.UtcNow.AddDays(-38), Diagnosis = "Hypertension Crisis", Observation = "Blood pressure dangerously high.", DoctorId = doctors[1].Id, PatientId = patients[2].Id },
+                    new Admission { AdmissionDate = DateTime.UtcNow.AddDays(-35), Diagnosis = "Migraine", Observation = "Intense headache, light sensitivity.", DoctorId = doctors[2].Id, PatientId = patients[1].Id },
+                    new Admission { AdmissionDate = DateTime.UtcNow.AddDays(-33), Diagnosis = "COVID-19", Observation = "Severe respiratory distress.", DoctorId = doctors[3].Id, PatientId = patients[0].Id },
+                    new Admission { AdmissionDate = DateTime.UtcNow.AddDays(-30), Diagnosis = "Food Poisoning", Observation = "Vomiting and dehydration.", DoctorId = doctors[0].Id, PatientId = patients[3].Id },
+                    new Admission { AdmissionDate = DateTime.UtcNow.AddDays(-28), Diagnosis = "Stroke", Observation = "Slurred speech, weakness.", DoctorId = doctors[1].Id, PatientId = patients[2].Id }
+                };
 
                 context.Admissions.AddRange(newAdmissions);
                 context.SaveChanges();
@@ -86,16 +91,18 @@ namespace mPathProject.Infrastructure.Persistence
             // Seed Discharges
             if (!context.Discharges.Any() && admissions.Any())
             {
-                var newDischarges = admissions.Select((admission, index) => new Discharge
+                var discharges = new List<Discharge>
                 {
-                    Treatment = $"Treatment {index + 1}",
-                    DischargeDate = admission.AdmissionDate.AddDays(7),
-                    Amount = (index + 1) * 100.00m,
-                    IsPaid = index % 2 == 0,
-                    AdmissionId = admission.Id
-                }).ToList();
+                    new Discharge { AdmissionId = admissions[0].Id, DischargeDate = admissions[0].AdmissionDate.AddDays(7), Recommendation = "Continue antibiotics, follow-up in 2 weeks.", Amount = 500.00m },
+                    new Discharge { AdmissionId = admissions[1].Id, DischargeDate = admissions[1].AdmissionDate.AddDays(5), Recommendation = "Monitor blood glucose levels, hydrate well.", Amount = 350.00m },
+                    new Discharge { AdmissionId = admissions[2].Id, DischargeDate = admissions[2].AdmissionDate.AddDays(4), Recommendation = "Use prescribed inhalers, avoid allergens.", Amount = 400.00m },
+                    new Discharge { AdmissionId = admissions[3].Id, DischargeDate = admissions[3].AdmissionDate.AddDays(6), Recommendation = "Wear cast for 4 weeks, physical therapy needed.", Amount = 700.00m },
+                    new Discharge { AdmissionId = admissions[4].Id, DischargeDate = admissions[4].AdmissionDate.AddDays(3), Recommendation = "Surgery completed, avoid heavy lifting.", Amount = 1200.00m },
+                    new Discharge { AdmissionId = admissions[5].Id, DischargeDate = admissions[5].AdmissionDate.AddDays(10), Recommendation = "Daily BP monitoring, low-sodium diet.", Amount = 600.00m },
+                    new Discharge { AdmissionId = admissions[6].Id, DischargeDate = admissions[6].AdmissionDate.AddDays(2), Recommendation = "Avoid bright lights, take prescribed meds.", Amount = 250.00m }
+                };
 
-                context.Discharges.AddRange(newDischarges);
+                context.Discharges.AddRange(discharges);
                 context.SaveChanges();
             }
         }

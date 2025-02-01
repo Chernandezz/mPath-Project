@@ -25,6 +25,6 @@ public class Patient
 
     public string? Observations { get; set; }
 
-    // Relación with User
+    // Relation with User
     public virtual User User { get; set; }
 }
