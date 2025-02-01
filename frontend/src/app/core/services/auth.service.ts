@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { HttpService } from './http.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,17 +14,25 @@ export class AuthService {
     this.isLoggedIn()
   );
 
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  constructor(
+    private httpClient: HttpClient,
+    private router: Router,
+    private httpService: HttpService
+  ) {}
 
   login(email: string, password: string): Observable<any> {
-    
-    
     const url = `${this.apiUrl}/Login`;
 
     return this.httpClient.post(url, { email, password }).pipe(
       tap((response: any) => {
         if (response?.accessToken) {
           localStorage.setItem('accessToken', response.accessToken);
+          this.httpService.logAction(
+            'LOGIN',
+            'User',
+            undefined,
+            'User logged in'
+          );
 
           let payload = this.decodeToken(response.accessToken);
           localStorage.setItem('userId', payload.userId);
@@ -74,7 +83,7 @@ export class AuthService {
     return payload.exp > currentTime;
   }
 
-  private decodeToken(token: string ): any {
+  private decodeToken(token: string): any {
     try {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

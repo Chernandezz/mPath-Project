@@ -44,14 +44,7 @@ export class IndexComponent implements OnInit {
   }
 
   loadAdmissions() {
-    if(this.userRole === 'Admin') {
-      this.admissionService
-        .getAll(this.pageCount, this.pageNumber, this.searchText)
-        .subscribe((response) => {
-          this.dataSource.data = response.data;
-          this.totalItems = response.totalItems;
-        });
-    }else{
+    if(this.userRole === 'Patient') {
       this.admissionService
         .getAllByUserId(
           this.pageCount,
@@ -63,9 +56,15 @@ export class IndexComponent implements OnInit {
           this.dataSource.data = response.data;
           this.totalItems = response.totalItems;
         });
+      
+    }else{
+      this.admissionService
+        .getAll(this.pageCount, this.pageNumber, this.searchText)
+        .subscribe((response) => {
+          this.dataSource.data = response.data;
+          this.totalItems = response.totalItems;
+        });
     }
-    
-    
     
   }
 

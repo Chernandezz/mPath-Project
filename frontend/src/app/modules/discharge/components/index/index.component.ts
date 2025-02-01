@@ -27,8 +27,9 @@ export class IndexComponent implements OnInit {
   totalItems = 0;
   pageCount = 10;
   pageNumber = 0;
-  searchText = '';
   userId = Number(localStorage.getItem('userId'));
+  userRole = localStorage.getItem('role');
+  searchText = '';
   paginationOptions: number[] = [5, 10, 25, 50];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -43,17 +44,26 @@ export class IndexComponent implements OnInit {
   }
 
   loadDischarges() {
-    this.dischargeService
-      .getAllByUserId(
-        this.pageCount,
-        this.pageNumber,
-        this.searchText,
-        this.userId
-      )
-      .subscribe((response) => {
-        this.dataSource.data = response.data;
-        this.totalItems = response.totalItems;
-      });
+    if (this.userRole === 'Patient') {
+      this.dischargeService
+        .getAllByUserId(
+          this.pageCount,
+          this.pageNumber,
+          this.searchText,
+          this.userId
+        )
+        .subscribe((response) => {
+          this.dataSource.data = response.data;
+          this.totalItems = response.totalItems;
+        });
+    } else {
+      this.dischargeService
+        .getAll(this.pageCount, this.pageNumber, this.searchText)
+        .subscribe((response) => {
+          this.dataSource.data = response.data;
+          this.totalItems = response.totalItems;
+        });
+    }
   }
 
   handlePageEvent(event: PageEvent) {
@@ -61,8 +71,6 @@ export class IndexComponent implements OnInit {
     this.pageNumber = event.pageIndex;
     this.loadDischarges();
   }
-
-  
 
   createDischarge() {
     const dialogRef = this.dialog.open(FormComponent, {

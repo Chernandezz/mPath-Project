@@ -37,18 +37,21 @@ export class HttpService {
   }
 
   post<T>(route: string, body: any): Observable<T> {
+    this.logAction('CREATE', route, undefined, 'Created a new entity');
     return this.httpClient.post<T>(`${this.apiBase}/${route}`, body, {
       headers: this.getAuthHeaders(),
     });
   }
 
   put<T>(route: string, id: number, body: any): Observable<T> {
+     this.logAction('UPDATE', route, id, 'Updated entity');
     return this.httpClient.put<T>(`${this.apiBase}/${route}/${id}`, body, {
       headers: this.getAuthHeaders(),
     });
   }
 
   deactivate<T>(route: string, id: number): Observable<T> {
+    this.logAction('DEACTIVATE', route, id, 'Doctor deactivated');
     return this.httpClient.put<T>(
       `${this.apiBase}/${route}/${id}/deactivate`,
       null,
@@ -59,6 +62,7 @@ export class HttpService {
   }
 
   activate<T>(route: string, id: number): Observable<T> {
+    this.logAction('ACTIVATE', route, id, 'Doctor activated');
     return this.httpClient.put<T>(
       `${this.apiBase}/${route}/${id}/activate`,
       null,
@@ -94,6 +98,30 @@ export class HttpService {
         headers: this.getAuthHeaders(),
       }
     );
+  }
+
+  public logAction(
+    action: string,
+    entity: string,
+    entityId?: number,
+    details?: string
+  ) {
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+
+    const log = {
+      UserId: userId,
+      Action: action,
+      Entity: entity,
+      EntityId: entityId,
+      Details: details,
+    };
+
+    this.httpClient
+      .post(`${this.apiBase}/AuditLog/create-log`, log, {
+        headers: this.getAuthHeaders(),
+      })
+      .subscribe();
   }
 
   activateRecommendation<T>(route: string, id: number): Observable<T> {
